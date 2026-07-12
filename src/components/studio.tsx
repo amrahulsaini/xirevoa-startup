@@ -115,9 +115,13 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
         </p>
       </header>
 
-      <div className="grid gap-10 lg:grid-cols-[440px_1fr]">
-        {/* ───────────── Left: you ───────────── */}
-        <div className="lg:sticky lg:top-28 lg:self-start">
+      <div className="grid items-start gap-10 lg:grid-cols-[440px_1fr]">
+        {/* Left column: only stick when it actually fits the viewport. Pinning a
+            column taller than the screen strands its lower half (the Fit button)
+            off-screen and unreachable — which is what "can't scroll the left
+            side while it generates" was. `max-h` + overflow lets it scroll on
+            its own when tall. */}
+        <div className="lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:self-start lg:overflow-y-auto lg:pr-1 lg:[scrollbar-width:thin]">
           <PhotoPane
             person={person}
             result={result}
@@ -174,7 +178,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
             >
               {stage === "fitting" ? (
                 <>
-                  <Spinner className="text-[10px]" />
+                  <Spinner className="text-lg" />
                   Fitting…
                 </>
               ) : (
@@ -400,7 +404,7 @@ function FittingOverlay() {
       />
 
       <div className="relative z-10 pb-10 text-center">
-        <Spinner className="justify-center text-base" />
+        <Spinner className="mx-auto text-3xl" />
         <AnimatePresence mode="wait">
           <motion.p
             key={i}

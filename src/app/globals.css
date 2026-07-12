@@ -212,14 +212,10 @@
   }
 }
 
-/* Spinner bars breathing like folds of cloth */
-@keyframes bob {
-  0%,
-  100% {
-    transform: translateY(0) scaleY(1);
-  }
-  50% {
-    transform: translateY(-6px) scaleY(1.35);
+/* Loading spinner rotation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

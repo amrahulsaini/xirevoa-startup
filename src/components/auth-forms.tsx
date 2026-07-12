@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { ArrowRight, Lock, Mail, User } from "lucide-react";
-import { login, register, type AuthState } from "@/app/signin/actions";
+import { ArrowLeft, ArrowRight, KeyRound, Lock, Mail, User } from "lucide-react";
+import {
+  login,
+  register,
+  requestOtp,
+  verifyOtp,
+  type AuthState,
+  type OtpState,
+} from "@/app/signin/actions";
 
 /**
  * Sign-in and sign-up as two dedicated forms.
@@ -62,6 +69,13 @@ export function SignInForm({
   );
 }
 
+/**
+ * Sign-up in three steps: email → emailed code → username + password.
+ *
+ * The email is verified by OTP before an account is created, so every account
+ * owns a real inbox. The verified email and its code are carried in hidden
+ * fields into the final step, where `register` consumes the code atomically.
+ */
 export function SignUpForm({
   googleAction,
   showGoogle,
@@ -71,8 +85,52 @@ export function SignUpForm({
   showGoogle: boolean;
   next: string;
 }) {
-  const [state, formAction] = useActionState<AuthState, FormData>(register, null);
-  useRedirectOnSuccess(state);
+  const [step, setStep] = useState<"email" | "code" | "details">("email");
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+
+  if (step === "email") {
+    return (
+      <EmailStep
+        showGoogle={showGoogle}
+        googleAction={googleAction}
+        onSent={(e) => {
+          setEmail(e);
+          setStep("code");
+        }}
+      />
+    );
+  }
+
+  if (step === "code") {
+    return (
+      <CodeStep
+        email={email}
+        onBack={() => setStep("email")}
+        onVerified={(c) => {
+          setCode(c);
+          setStep("details");
+        }}
+      />
+    );
+  }
+
+  return <DetailsStep email={email} code={code} next={next} onBack={() => setStep("code")} />;
+}
+
+function EmailStep({
+  showGoogle,
+  googleAction,
+  onSent,
+}: {
+  showGoogle: boolean;
+  googleAction: () => Promise<void>;
+  onSent: (email: string) => void;
+}) {
+  const [state, formAction] = useActionState<OtpState, FormData>(requestOtp, null);
+  useEffect(() => {
+    if (state?.ok && state.email) onSent(state.email);
+  }, [state, onSent]);
 
   return (
     <div className="mt-8">
@@ -84,16 +142,11 @@ export function SignUpForm({
           <Divider />
         </>
       )}
-
       <form action={formAction} className="space-y-3">
-        <input type="hidden" name="next" value={next} />
-        <Field name="email" type="email" autoComplete="email" placeholder="you@email.com" icon={<Mail className="size-4" />} autoFocus error={state?.field === "email" ? state.error : undefined} />
-        <Field name="username" autoComplete="username" placeholder="username" icon={<User className="size-4" />} hint="3–20 characters — letters, numbers, underscores" error={state?.field === "username" ? state.error : undefined} />
-        <Field name="password" type="password" autoComplete="new-password" placeholder="password" icon={<Lock className="size-4" />} hint="At least 8 characters" error={state?.field === "password" ? state.error : undefined} />
-        {state?.error && !state.field && <ErrorLine>{state.error}</ErrorLine>}
-        <Submit>Create account</Submit>
+        <Field name="email" type="email" autoComplete="email" placeholder="you@email.com" icon={<Mail className="size-4" />} autoFocus />
+        {state?.error && <ErrorLine>{state.error}</ErrorLine>}
+        <Submit>Email me a code</Submit>
       </form>
-
       <p className="mt-6 text-center text-sm text-bone-400">
         Already have an account?{" "}
         <Link href="/signin" className="text-bone-100 underline underline-offset-4 hover:text-flare-rose">
@@ -101,6 +154,92 @@ export function SignUpForm({
         </Link>
       </p>
     </div>
+  );
+}
+
+function CodeStep({
+  email,
+  onBack,
+  onVerified,
+}: {
+  email: string;
+  onBack: () => void;
+  onVerified: (code: string) => void;
+}) {
+  const [state, formAction] = useActionState<OtpState, FormData>(verifyOtp, null);
+  const [code, setCode] = useState("");
+  useEffect(() => {
+    if (state?.ok) onVerified(code);
+  }, [state, code, onVerified]);
+
+  return (
+    <div className="mt-8">
+      <BackTo label={email} onClick={onBack} />
+      <p className="mt-3 mb-4 text-sm text-bone-300">
+        We emailed a 6-digit code to <span className="text-bone-100">{email}</span>. Enter it below.
+      </p>
+      <form action={formAction} className="space-y-3">
+        <input type="hidden" name="email" value={email} />
+        <Field
+          name="code"
+          inputMode="numeric"
+          maxLength={6}
+          placeholder="000000"
+          icon={<KeyRound className="size-4" />}
+          autoFocus
+          value={code}
+          onChange={(v) => setCode(v.replace(/\D/g, "").slice(0, 6))}
+          className="text-center text-lg tracking-[0.5em]"
+        />
+        {state?.error && <ErrorLine>{state.error}</ErrorLine>}
+        <Submit>Verify</Submit>
+      </form>
+    </div>
+  );
+}
+
+function DetailsStep({
+  email,
+  code,
+  next,
+  onBack,
+}: {
+  email: string;
+  code: string;
+  next: string;
+  onBack: () => void;
+}) {
+  const [state, formAction] = useActionState<AuthState, FormData>(register, null);
+  useRedirectOnSuccess(state);
+
+  return (
+    <div className="mt-8">
+      <BackTo label={email} onClick={onBack} />
+      <p className="mt-3 mb-4 text-sm text-bone-300">Email verified. Choose a username and password.</p>
+      <form action={formAction} className="space-y-3">
+        <input type="hidden" name="email" value={email} />
+        <input type="hidden" name="code" value={code} />
+        <input type="hidden" name="next" value={next} />
+        <Field name="username" autoComplete="username" placeholder="username" icon={<User className="size-4" />} autoFocus hint="3–20 characters — letters, numbers, underscores" error={state?.field === "username" ? state.error : undefined} />
+        <Field name="password" type="password" autoComplete="new-password" placeholder="password" icon={<Lock className="size-4" />} hint="At least 8 characters" error={state?.field === "password" ? state.error : undefined} />
+        {state?.error && !state.field && <ErrorLine>{state.error}</ErrorLine>}
+        {state?.field === "email" && <ErrorLine>{state.error}</ErrorLine>}
+        <Submit>Create account</Submit>
+      </form>
+    </div>
+  );
+}
+
+function BackTo({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-1.5 text-sm text-bone-400 transition-colors hover:text-bone-100"
+    >
+      <ArrowLeft className="size-3.5" />
+      {label}
+    </button>
   );
 }
 
@@ -115,6 +254,11 @@ function Field({
   hint,
   error,
   autoFocus,
+  inputMode,
+  maxLength,
+  value,
+  onChange,
+  className = "",
 }: {
   name: string;
   type?: string;
@@ -124,6 +268,11 @@ function Field({
   hint?: string;
   error?: string;
   autoFocus?: boolean;
+  inputMode?: "numeric" | "text" | "email";
+  maxLength?: number;
+  value?: string;
+  onChange?: (v: string) => void;
+  className?: string;
 }) {
   return (
     <div>
@@ -139,10 +288,14 @@ function Field({
           required
           autoComplete={autoComplete}
           autoFocus={autoFocus}
+          inputMode={inputMode}
+          maxLength={maxLength}
           placeholder={placeholder}
+          value={value}
+          onChange={onChange ? (e) => onChange(e.target.value) : undefined}
           className={`hairline w-full rounded-full border bg-ink-900 py-3.5 pr-4 pl-11 text-sm text-bone-100 placeholder:text-bone-500 ${
             error ? "border-flare-rose" : ""
-          }`}
+          } ${className}`}
         />
       </div>
       {error ? (

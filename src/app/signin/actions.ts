@@ -4,6 +4,15 @@ import { AuthError } from "next-auth";
 import { prisma } from "@/lib/db";
 import { signIn } from "@/auth";
 import { hashPassword, validateCredentials } from "@/lib/password";
+import { issueOtp, checkOtp, consumeOtp } from "@/lib/otp";
+import { sendOtpEmail } from "@/lib/email";
+import { rateLimit } from "@/lib/rate-limit";
+
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+export type OtpState =
+  | { ok?: boolean; error?: string; email?: string }
+  | null;
 
 // The client navigates on `redirectTo` rather than the action issuing the
 // redirect: in this Auth.js beta, signIn() inside a server action sets the
@@ -18,21 +27,43 @@ function safe(next: string | undefined) {
   return next?.startsWith("/") && !next.startsWith("//") ? next : "/studio";
 }
 
-/** Email-first step: does this account exist, and can it use a password? */
-export async function checkEmail(email: string) {
-  const normalised = email.trim().toLowerCase();
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(normalised)) {
-    return { valid: false as const };
+/** Step 1 of sign-up: email a 6-digit verification code. */
+export async function requestOtp(_prev: OtpState, formData: FormData): Promise<OtpState> {
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  if (!EMAIL_RE.test(email)) {
+    return { error: "Enter a valid email address." };
   }
-  const user = await prisma.user.findUnique({
-    where: { email: normalised },
+
+  // Cap code sends so the mailbox (and our SMTP reputation) can't be flooded.
+  const gate = rateLimit(`otp:${email}`, 5, 15 * 60 * 1000);
+  if (!gate.ok) {
+    return { error: "Too many codes requested. Try again in a few minutes." };
+  }
+
+  const existing = await prisma.user.findUnique({
+    where: { email },
     select: { passwordHash: true },
   });
-  return {
-    valid: true as const,
-    exists: Boolean(user),
-    hasPassword: Boolean(user?.passwordHash),
-  };
+  if (existing?.passwordHash) {
+    return { error: "An account with this email already exists. Sign in instead." };
+  }
+
+  try {
+    await sendOtpEmail(email, await issueOtp(email));
+  } catch {
+    return { error: "We couldn't send the code. Check the address and try again." };
+  }
+  return { ok: true, email };
+}
+
+/** Step 2: confirm the code before showing the username/password fields. */
+export async function verifyOtp(_prev: OtpState, formData: FormData): Promise<OtpState> {
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const code = String(formData.get("code") ?? "").trim();
+  if (!(await checkOtp(email, code))) {
+    return { error: "That code is wrong or has expired." };
+  }
+  return { ok: true, email };
 }
 
 export async function login(_prev: AuthState, formData: FormData): Promise<AuthState> {
@@ -53,6 +84,7 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
 
 export async function register(_prev: AuthState, formData: FormData): Promise<AuthState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const code = String(formData.get("code") ?? "").trim();
   const username = String(formData.get("username") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const next = safe(String(formData.get("next") ?? ""));
@@ -61,6 +93,12 @@ export async function register(_prev: AuthState, formData: FormData): Promise<Au
   if (!ok) {
     const field = errors.username ? "username" : "password";
     return { error: errors[field], field };
+  }
+
+  // The email was proven at the OTP step; consume the code here so account
+  // creation and email verification are one atomic decision.
+  if (!(await consumeOtp(email, code))) {
+    return { error: "Your email verification expired. Start again.", field: "email" };
   }
 
   // Race-safe enough for our scale: the unique constraints on email/username are
@@ -83,6 +121,7 @@ export async function register(_prev: AuthState, formData: FormData): Promise<Au
     await prisma.user.create({
       data: {
         email,
+        emailVerified: new Date(),
         username: username.toLowerCase(),
         name: username,
         passwordHash: await hashPassword(password),
