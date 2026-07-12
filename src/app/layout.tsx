@@ -6,6 +6,9 @@ import { Footer } from "@/components/footer";
 import { Grain } from "@/components/grain";
 import { themeScript } from "@/components/theme";
 import { auth, signOut } from "@/auth";
+import { prisma } from "@/lib/db";
+import { getBalance } from "@/lib/xpoints";
+import { ClaimBonus } from "@/components/claim-bonus";
 
 const instrument = Instrument_Serif({
   weight: "400",
@@ -60,6 +63,21 @@ export default async function RootLayout({
   // keeps the session out of the client bundle entirely.
   const session = await auth();
 
+  // Balance for the navbar chip, and whether the signup bonus is still unclaimed.
+  let balance = 0;
+  let needsBonus = false;
+  if (session?.user?.id) {
+    const [bal, bonusTx] = await Promise.all([
+      getBalance(session.user.id),
+      prisma.xPointTx.findFirst({
+        where: { userId: session.user.id, reason: "signup_bonus" },
+        select: { id: true },
+      }),
+    ]);
+    balance = bal;
+    needsBonus = !bonusTx;
+  }
+
   return (
     // suppressHydrationWarning: the inline script stamps data-theme on <html>
     // before React hydrates, so this element legitimately differs from the SSR output.
@@ -74,10 +92,17 @@ export default async function RootLayout({
       </head>
       <body className="min-h-dvh bg-ink-950 text-bone-100 antialiased">
         <Grain />
+        {/* Only mounts for a signed-in account that has never had the bonus, so
+            in the normal case this never runs. */}
+        {session?.user?.id && needsBonus && <ClaimBonus />}
         <Navbar
           user={
             session?.user
-              ? { name: session.user.name, image: session.user.image }
+              ? {
+                  name: session.user.name,
+                  image: session.user.image,
+                  xpoints: balance,
+                }
               : null
           }
           signOutAction={async () => {

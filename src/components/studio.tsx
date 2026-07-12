@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useCallback,
   useEffect,
@@ -61,7 +63,12 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
   // of that download, so we hold the user's photo until the result has painted.
   const [resultPainted, setResultPainted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** When an error is fixable (sign in / top up), point straight at the fix. */
+  const [fixLink, setFixLink] = useState<{ href: string; label: string } | null>(
+    null,
+  );
   const fileInput = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const [limit, setLimit] = useState(PAGE_SIZE);
 
@@ -148,16 +155,21 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
 
       if (!res.ok) {
         setError(data.error ?? "Something went wrong.");
+        // 401 = signed out, 402 = out of XPoints. Both are fixable, so offer the
+        // fix rather than just an error message.
+        setFixLink(
+          data.signin
+            ? { href: "/signin?next=/studio", label: "Sign in" }
+            : data.insufficient
+              ? { href: "/pricing", label: "Get XPoints" }
+              : null,
+        );
         setStage("error");
-        pushNote({
-          title: "Try-on failed",
-          body: data.error ?? "Something went wrong. Please try again.",
-          href: "/studio",
-        });
         return;
       }
       setResult(data.url);
       setStage("done");
+      if (typeof data.xpoints === "number") router.refresh();
       pushNote({
         title: "Your look is ready",
         body: names ? `You're wearing ${names}.` : "Your try-on is ready to view.",
@@ -229,15 +241,25 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
 
           <AnimatePresence>
             {error && (
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-4 flex items-start gap-2 text-sm text-flare-rose"
+                className="mt-4"
               >
-                <AlertCircle className="mt-0.5 size-4 shrink-0" />
-                {error}
-              </motion.p>
+                <p className="flex items-start gap-2 text-sm text-flare-rose">
+                  <AlertCircle className="mt-0.5 size-4 shrink-0" />
+                  {error}
+                </p>
+                {fixLink && (
+                  <Link
+                    href={fixLink.href}
+                    className="mt-3 inline-flex rounded-full bg-bone-100 px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95"
+                  >
+                    {fixLink.label}
+                  </Link>
+                )}
+              </motion.div>
             )}
           </AnimatePresence>
 

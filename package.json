@@ -11,7 +11,8 @@
     "seed:showcase": "tsx --env-file=.env.local scripts/seed-showcase.ts",
     "seed:db": "tsx --env-file=.env.local scripts/seed-db.ts",
     "db:push": "prisma db push",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed:haircuts": "tsx --env-file=.env.local scripts/seed-haircuts.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
@@ -28,6 +29,7 @@
     "next-auth": "^5.0.0-beta.31",
     "nodemailer": "^7.0.13",
     "pg": "^8.22.0",
+    "razorpay": "^2.9.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "server-only": "^0.0.1",

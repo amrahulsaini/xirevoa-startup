@@ -23,6 +23,30 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model XPointTx
+ * Append-only ledger. The User.xpoints balance is a cache of this; every
+ * change writes a row, so a disputed balance can always be reconstructed.
+ */
+export type XPointTx = Prisma.XPointTxModel
+/**
+ * Model Order
+ * A Razorpay purchase of XPoints.
+ */
+export type Order = Prisma.OrderModel
+/**
+ * Model FreeGrant
+ * ──────────────────────── Free-grant abuse guard ──────────────────────
+ * 
+ * Signup bonuses are real money (20 XPoints ≈ 2 try-ons ≈ ₹26 of Gemini spend),
+ * so they can't be farmed by clearing cookies or opening an incognito window.
+ * We record the device fingerprint and a hashed IP of every free grant.
+ * 
+ * Fingerprint is the strong signal and is unique — one free grant per device.
+ * IP is deliberately NOT unique: most Indian mobile traffic is behind CGNAT, so
+ * thousands of legitimate users share one address. It's rate-limited instead.
+ */
+export type FreeGrant = Prisma.FreeGrantModel
+/**
  * Model Account
  * 
  */

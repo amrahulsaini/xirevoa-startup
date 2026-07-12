@@ -31,10 +31,99 @@ model User {
   /// Storage key, not a URL — the driver decides how to serve it.
   photoKey String?
 
+  /// Spendable balance. Never write this directly — go through spend()/grant()
+  /// in lib/xpoints so the ledger and the balance can't drift apart.
+  xpoints Int @default(0)
+
   accounts Account[]
   sessions Session[]
   looks    Look[]
   store    Store?
+  xpointTx XPointTx[]
+  orders   Order[]
+}
+
+/// ────────────────────────── XPoints economy ───────────────────────────
+
+enum XPointReason {
+  signup_bonus
+  tryon
+  haircut
+  purchase
+  refund
+  admin
+}
+
+/// Append-only ledger. The User.xpoints balance is a cache of this; every
+/// change writes a row, so a disputed balance can always be reconstructed.
+model XPointTx {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Positive = credit, negative = debit.
+  delta   Int
+  reason  XPointReason
+  /// Balance immediately after this row was applied — makes audits trivial.
+  balance Int
+  /// Free-text context: which look, which order.
+  note    String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+enum OrderStatus {
+  created
+  paid
+  failed
+}
+
+/// A Razorpay purchase of XPoints.
+model Order {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Razorpay's order id (order_xxx) and, once captured, the payment id.
+  razorpayOrderId   String  @unique
+  razorpayPaymentId String?
+
+  /// What they bought. Amount is in paise — never store money as a float.
+  packId       String
+  amountPaise  Int
+  xpoints      Int
+
+  status    OrderStatus @default(created)
+  createdAt DateTime    @default(now())
+  paidAt    DateTime?
+
+  @@index([userId, createdAt])
+}
+
+/// ──────────────────────── Free-grant abuse guard ──────────────────────
+///
+/// Signup bonuses are real money (20 XPoints ≈ 2 try-ons ≈ ₹26 of Gemini spend),
+/// so they can't be farmed by clearing cookies or opening an incognito window.
+/// We record the device fingerprint and a hashed IP of every free grant.
+///
+/// Fingerprint is the strong signal and is unique — one free grant per device.
+/// IP is deliberately NOT unique: most Indian mobile traffic is behind CGNAT, so
+/// thousands of legitimate users share one address. It's rate-limited instead.
+model FreeGrant {
+  id String @id @default(cuid())
+
+  /// Hash of the browser fingerprint. Unique: a device gets the bonus once.
+  fingerprint String @unique
+
+  /// Hashed IP — never store a raw IP we don't need.
+  ipHash String
+
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@index([ipHash, createdAt])
 }
 
 model Account {
