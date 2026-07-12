@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   XIREVOA · Design System
+   Editorial fashion meets AI. Near-black canvas, warm ivory,
+   one signature iridescent accent ("Flare").
+   ───────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Canvas — warm-shifted blacks, never pure #000 (kills the luxe) */
+  --color-ink-950: #08080a;
+  --color-ink-900: #0e0e11;
+  --color-ink-800: #16161b;
+  --color-ink-700: #1f1f26;
+  --color-ink-600: #2b2b34;
+  --color-ink-500: #3d3d48;
+
+  /* Ivory — warm, paper-like. Pure white is too clinical for fashion. */
+  --color-bone-50: #faf8f4;
+  --color-bone-100: #f5f2ec;
+  --color-bone-200: #e8e3d9;
+  --color-bone-300: #c9c3b6;
+  --color-bone-400: #948f84;
+  /* Dimmest readable tier — counters, placeholders, "nothing here yet" copy. */
+  --color-bone-500: #6b675f;
+
+  /* Flare — the signature. Used sparingly; scarcity makes it read as premium. */
+  --color-flare-amber: #f5a524;
+  --color-flare-rose: #e8367a;
+  --color-flare-violet: #7c3aed;
+
+  --font-display: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion — one shared easing so everything feels like one hand made it */
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-swift: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background: var(--color-ink-950);
+    color: var(--color-bone-100);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-flare-rose);
+    color: var(--color-bone-50);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-flare-rose);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink-950);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-700);
+    border-radius: 99px;
+    border: 3px solid var(--color-ink-950);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-600);
+  }
+}
+
+@layer components {
+  /* The Flare gradient, as text */
+  .text-flare {
+    background: linear-gradient(
+      100deg,
+      var(--color-flare-amber),
+      var(--color-flare-rose) 45%,
+      var(--color-flare-violet)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Hairline dividers — 1px at low alpha reads as "expensive" */
+  .hairline {
+    border-color: color-mix(in oklab, var(--color-bone-100) 10%, transparent);
+  }
+
+  .glass {
+    background: color-mix(in oklab, var(--color-ink-900) 72%, transparent);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+
+  /* Animated gradient border: a spinning conic gradient sits behind,
+     masked so only a 1px rim shows. */
+  .flare-border {
+    position: relative;
+    isolation: isolate;
+  }
+  .flare-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--flare-angle, 0deg),
+      transparent 0%,
+      var(--color-flare-amber) 12%,
+      var(--color-flare-rose) 25%,
+      var(--color-flare-violet) 38%,
+      transparent 50%,
+      transparent 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: flare-spin 4s linear infinite;
+    z-index: -1;
+  }
+}
+
+@property --flare-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes flare-spin {
+  to {
+    --flare-angle: 360deg;
+  }
+}
+
+/* Slow ambient drift for the hero aurora */
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-3%, 2%, 0) scale(0.96);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Film grain keeps large flat dark areas from looking like dead pixels */
+@keyframes grain {
+  0%,
+  100% { transform: translate(0, 0); }
+  20%  { transform: translate(-3%, 2%); }
+  40%  { transform: translate(2%, -3%); }
+  60%  { transform: translate(-2%, -2%); }
+  80%  { transform: translate(3%, 3%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
