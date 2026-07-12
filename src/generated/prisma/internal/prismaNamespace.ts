@@ -385,6 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  XPointTx: 'XPointTx',
+  Order: 'Order',
+  FreeGrant: 'FreeGrant',
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
@@ -407,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "garment" | "look" | "lookGarment" | "store"
+    modelProps: "user" | "xPointTx" | "order" | "freeGrant" | "account" | "session" | "verificationToken" | "garment" | "look" | "lookGarment" | "store"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -482,6 +485,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    XPointTx: {
+      payload: Prisma.$XPointTxPayload<ExtArgs>
+      fields: Prisma.XPointTxFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.XPointTxFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.XPointTxFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>
+        }
+        findFirst: {
+          args: Prisma.XPointTxFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.XPointTxFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>
+        }
+        findMany: {
+          args: Prisma.XPointTxFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>[]
+        }
+        create: {
+          args: Prisma.XPointTxCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>
+        }
+        createMany: {
+          args: Prisma.XPointTxCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.XPointTxCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>[]
+        }
+        delete: {
+          args: Prisma.XPointTxDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>
+        }
+        update: {
+          args: Prisma.XPointTxUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>
+        }
+        deleteMany: {
+          args: Prisma.XPointTxDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.XPointTxUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.XPointTxUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>[]
+        }
+        upsert: {
+          args: Prisma.XPointTxUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$XPointTxPayload>
+        }
+        aggregate: {
+          args: Prisma.XPointTxAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateXPointTx>
+        }
+        groupBy: {
+          args: Prisma.XPointTxGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.XPointTxGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.XPointTxCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.XPointTxCountAggregateOutputType> | number
+        }
+      }
+    }
+    Order: {
+      payload: Prisma.$OrderPayload<ExtArgs>
+      fields: Prisma.OrderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>
+        }
+        findMany: {
+          args: Prisma.OrderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>[]
+        }
+        create: {
+          args: Prisma.OrderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>
+        }
+        createMany: {
+          args: Prisma.OrderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>
+        }
+        update: {
+          args: Prisma.OrderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrder>
+        }
+        groupBy: {
+          args: Prisma.OrderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderCountAggregateOutputType> | number
+        }
+      }
+    }
+    FreeGrant: {
+      payload: Prisma.$FreeGrantPayload<ExtArgs>
+      fields: Prisma.FreeGrantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FreeGrantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FreeGrantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>
+        }
+        findFirst: {
+          args: Prisma.FreeGrantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FreeGrantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>
+        }
+        findMany: {
+          args: Prisma.FreeGrantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>[]
+        }
+        create: {
+          args: Prisma.FreeGrantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>
+        }
+        createMany: {
+          args: Prisma.FreeGrantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FreeGrantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>[]
+        }
+        delete: {
+          args: Prisma.FreeGrantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>
+        }
+        update: {
+          args: Prisma.FreeGrantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>
+        }
+        deleteMany: {
+          args: Prisma.FreeGrantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FreeGrantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FreeGrantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>[]
+        }
+        upsert: {
+          args: Prisma.FreeGrantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FreeGrantPayload>
+        }
+        aggregate: {
+          args: Prisma.FreeGrantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFreeGrant>
+        }
+        groupBy: {
+          args: Prisma.FreeGrantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FreeGrantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FreeGrantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FreeGrantCountAggregateOutputType> | number
         }
       }
     }
@@ -1051,10 +1276,51 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   username: 'username',
   passwordHash: 'passwordHash',
-  photoKey: 'photoKey'
+  photoKey: 'photoKey',
+  xpoints: 'xpoints'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const XPointTxScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  delta: 'delta',
+  reason: 'reason',
+  balance: 'balance',
+  note: 'note',
+  createdAt: 'createdAt'
+} as const
+
+export type XPointTxScalarFieldEnum = (typeof XPointTxScalarFieldEnum)[keyof typeof XPointTxScalarFieldEnum]
+
+
+export const OrderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  razorpayOrderId: 'razorpayOrderId',
+  razorpayPaymentId: 'razorpayPaymentId',
+  packId: 'packId',
+  amountPaise: 'amountPaise',
+  xpoints: 'xpoints',
+  status: 'status',
+  createdAt: 'createdAt',
+  paidAt: 'paidAt'
+} as const
+
+export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const FreeGrantScalarFieldEnum = {
+  id: 'id',
+  fingerprint: 'fingerprint',
+  ipHash: 'ipHash',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type FreeGrantScalarFieldEnum = (typeof FreeGrantScalarFieldEnum)[keyof typeof FreeGrantScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {
@@ -1218,6 +1484,34 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'XPointReason'
+ */
+export type EnumXPointReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'XPointReason'>
+    
+
+
+/**
+ * Reference to a field of type 'XPointReason[]'
+ */
+export type ListEnumXPointReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'XPointReason[]'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderStatus'
+ */
+export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderStatus[]'
+ */
+export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Category'
  */
 export type EnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Category'>
@@ -1376,6 +1670,9 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  xPointTx?: Prisma.XPointTxOmit
+  order?: Prisma.OrderOmit
+  freeGrant?: Prisma.FreeGrantOmit
   account?: Prisma.AccountOmit
   session?: Prisma.SessionOmit
   verificationToken?: Prisma.VerificationTokenOmit

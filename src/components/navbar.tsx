@@ -12,14 +12,16 @@ import { cn } from "@/lib/cn";
 
 const LINKS = [
   { href: "/collection", label: "Collection" },
-  { href: "/studio", label: "Try-On Studio" },
+  { href: "/studio", label: "Studio" },
+  { href: "/salon", label: "Salon" },
   { href: "/looks", label: "Looks" },
-  { href: "/stores", label: "For Stores" },
+  { href: "/pricing", label: "XPoints" },
 ];
 
 export interface NavUser {
   name?: string | null;
   image?: string | null;
+  xpoints?: number;
 }
 
 export function Navbar({
@@ -128,6 +130,18 @@ export function Navbar({
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2">
+            {/* Balance is a link to top up — the one place people look when a
+                fit is refused for want of points. */}
+            {user && (
+              <Link
+                href="/pricing"
+                title="Your XPoints"
+                className="hairline hidden items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm text-bone-200 transition-colors hover:border-flare-rose/50 hover:text-bone-50 sm:flex"
+              >
+                <span className="font-semibold">{user.xpoints ?? 0}</span>
+                <span className="text-xs text-bone-400">XP</span>
+              </Link>
+            )}
             <NotificationBell />
             <ThemeToggle />
 

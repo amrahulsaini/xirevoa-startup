@@ -9,6 +9,27 @@
 * 🟢 You can import this file directly.
 */
 
+export const XPointReason = {
+  signup_bonus: 'signup_bonus',
+  tryon: 'tryon',
+  haircut: 'haircut',
+  purchase: 'purchase',
+  refund: 'refund',
+  admin: 'admin'
+} as const
+
+export type XPointReason = (typeof XPointReason)[keyof typeof XPointReason]
+
+
+export const OrderStatus = {
+  created: 'created',
+  paid: 'paid',
+  failed: 'failed'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
 export const Category = {
   tshirt: 'tshirt',
   shirt: 'shirt',

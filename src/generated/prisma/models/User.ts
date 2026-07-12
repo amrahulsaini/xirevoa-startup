@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  xpoints: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  xpoints: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -34,6 +44,7 @@ export type UserMinAggregateOutputType = {
   username: string | null
   passwordHash: string | null
   photoKey: string | null
+  xpoints: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -46,6 +57,7 @@ export type UserMaxAggregateOutputType = {
   username: string | null
   passwordHash: string | null
   photoKey: string | null
+  xpoints: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -58,9 +70,18 @@ export type UserCountAggregateOutputType = {
   username: number
   passwordHash: number
   photoKey: number
+  xpoints: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  xpoints?: true
+}
+
+export type UserSumAggregateInputType = {
+  xpoints?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -72,6 +93,7 @@ export type UserMinAggregateInputType = {
   username?: true
   passwordHash?: true
   photoKey?: true
+  xpoints?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -84,6 +106,7 @@ export type UserMaxAggregateInputType = {
   username?: true
   passwordHash?: true
   photoKey?: true
+  xpoints?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -96,6 +119,7 @@ export type UserCountAggregateInputType = {
   username?: true
   passwordHash?: true
   photoKey?: true
+  xpoints?: true
   _all?: true
 }
 
@@ -137,6 +161,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -167,6 +203,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -181,7 +219,10 @@ export type UserGroupByOutputType = {
   username: string | null
   passwordHash: string | null
   photoKey: string | null
+  xpoints: number
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -214,10 +255,13 @@ export type UserWhereInput = {
   username?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   photoKey?: Prisma.StringNullableFilter<"User"> | string | null
+  xpoints?: Prisma.IntFilter<"User"> | number
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   looks?: Prisma.LookListRelationFilter
   store?: Prisma.XOR<Prisma.StoreNullableScalarRelationFilter, Prisma.StoreWhereInput> | null
+  xpointTx?: Prisma.XPointTxListRelationFilter
+  orders?: Prisma.OrderListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -230,10 +274,13 @@ export type UserOrderByWithRelationInput = {
   username?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   photoKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  xpoints?: Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   looks?: Prisma.LookOrderByRelationAggregateInput
   store?: Prisma.StoreOrderByWithRelationInput
+  xpointTx?: Prisma.XPointTxOrderByRelationAggregateInput
+  orders?: Prisma.OrderOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -249,10 +296,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   photoKey?: Prisma.StringNullableFilter<"User"> | string | null
+  xpoints?: Prisma.IntFilter<"User"> | number
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   looks?: Prisma.LookListRelationFilter
   store?: Prisma.XOR<Prisma.StoreNullableScalarRelationFilter, Prisma.StoreWhereInput> | null
+  xpointTx?: Prisma.XPointTxListRelationFilter
+  orders?: Prisma.OrderListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -265,9 +315,12 @@ export type UserOrderByWithAggregationInput = {
   username?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   photoKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  xpoints?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -283,6 +336,7 @@ export type UserScalarWhereWithAggregatesInput = {
   username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   photoKey?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  xpoints?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
@@ -295,10 +349,13 @@ export type UserCreateInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -311,10 +368,13 @@ export type UserUncheckedCreateInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -327,10 +387,13 @@ export type UserUpdateInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -343,10 +406,13 @@ export type UserUncheckedUpdateInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -359,6 +425,7 @@ export type UserCreateManyInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
 }
 
 export type UserUpdateManyMutationInput = {
@@ -371,6 +438,7 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -383,6 +451,7 @@ export type UserUncheckedUpdateManyInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -395,6 +464,11 @@ export type UserCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   photoKey?: Prisma.SortOrder
+  xpoints?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  xpoints?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -407,6 +481,7 @@ export type UserMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   photoKey?: Prisma.SortOrder
+  xpoints?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -419,6 +494,11 @@ export type UserMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   photoKey?: Prisma.SortOrder
+  xpoints?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  xpoints?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -440,6 +520,42 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type UserCreateNestedOneWithoutXpointTxInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutXpointTxInput, Prisma.UserUncheckedCreateWithoutXpointTxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutXpointTxInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutXpointTxNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutXpointTxInput, Prisma.UserUncheckedCreateWithoutXpointTxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutXpointTxInput
+  upsert?: Prisma.UserUpsertWithoutXpointTxInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutXpointTxInput, Prisma.UserUpdateWithoutXpointTxInput>, Prisma.UserUncheckedUpdateWithoutXpointTxInput>
+}
+
+export type UserCreateNestedOneWithoutOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrdersInput
+  upsert?: Prisma.UserUpsertWithoutOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrdersInput, Prisma.UserUpdateWithoutOrdersInput>, Prisma.UserUncheckedUpdateWithoutOrdersInput>
 }
 
 export type UserCreateNestedOneWithoutAccountsInput = {
@@ -498,6 +614,182 @@ export type UserUpdateOneRequiredWithoutStoreNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStoreInput, Prisma.UserUpdateWithoutStoreInput>, Prisma.UserUncheckedUpdateWithoutStoreInput>
 }
 
+export type UserCreateWithoutXpointTxInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  username?: string | null
+  passwordHash?: string | null
+  photoKey?: string | null
+  xpoints?: number
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  looks?: Prisma.LookCreateNestedManyWithoutUserInput
+  store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutXpointTxInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  username?: string | null
+  passwordHash?: string | null
+  photoKey?: string | null
+  xpoints?: number
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
+  store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutXpointTxInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutXpointTxInput, Prisma.UserUncheckedCreateWithoutXpointTxInput>
+}
+
+export type UserUpsertWithoutXpointTxInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutXpointTxInput, Prisma.UserUncheckedUpdateWithoutXpointTxInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutXpointTxInput, Prisma.UserUncheckedCreateWithoutXpointTxInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutXpointTxInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutXpointTxInput, Prisma.UserUncheckedUpdateWithoutXpointTxInput>
+}
+
+export type UserUpdateWithoutXpointTxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  looks?: Prisma.LookUpdateManyWithoutUserNestedInput
+  store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutXpointTxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
+  store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutOrdersInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  username?: string | null
+  passwordHash?: string | null
+  photoKey?: string | null
+  xpoints?: number
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  looks?: Prisma.LookCreateNestedManyWithoutUserInput
+  store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOrdersInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  username?: string | null
+  passwordHash?: string | null
+  photoKey?: string | null
+  xpoints?: number
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
+  store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
+}
+
+export type UserUpsertWithoutOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrdersInput, Prisma.UserUncheckedUpdateWithoutOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOrdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrdersInput, Prisma.UserUncheckedUpdateWithoutOrdersInput>
+}
+
+export type UserUpdateWithoutOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  looks?: Prisma.LookUpdateManyWithoutUserNestedInput
+  store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
+  store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   name?: string | null
@@ -508,9 +800,12 @@ export type UserCreateWithoutAccountsInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -523,9 +818,12 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -554,9 +852,12 @@ export type UserUpdateWithoutAccountsInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -569,9 +870,12 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -584,9 +888,12 @@ export type UserCreateWithoutSessionsInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -599,9 +906,12 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -630,9 +940,12 @@ export type UserUpdateWithoutSessionsInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -645,9 +958,12 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLooksInput = {
@@ -660,9 +976,12 @@ export type UserCreateWithoutLooksInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLooksInput = {
@@ -675,9 +994,12 @@ export type UserUncheckedCreateWithoutLooksInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLooksInput = {
@@ -706,9 +1028,12 @@ export type UserUpdateWithoutLooksInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLooksInput = {
@@ -721,9 +1046,12 @@ export type UserUncheckedUpdateWithoutLooksInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStoreInput = {
@@ -736,9 +1064,12 @@ export type UserCreateWithoutStoreInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
+  xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoreInput = {
@@ -751,9 +1082,12 @@ export type UserUncheckedCreateWithoutStoreInput = {
   username?: string | null
   passwordHash?: string | null
   photoKey?: string | null
+  xpoints?: number
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
+  xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoreInput = {
@@ -782,9 +1116,12 @@ export type UserUpdateWithoutStoreInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoreInput = {
@@ -797,9 +1134,12 @@ export type UserUncheckedUpdateWithoutStoreInput = {
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -811,12 +1151,16 @@ export type UserCountOutputType = {
   accounts: number
   sessions: number
   looks: number
+  xpointTx: number
+  orders: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   looks?: boolean | UserCountOutputTypeCountLooksArgs
+  xpointTx?: boolean | UserCountOutputTypeCountXpointTxArgs
+  orders?: boolean | UserCountOutputTypeCountOrdersArgs
 }
 
 /**
@@ -850,6 +1194,20 @@ export type UserCountOutputTypeCountLooksArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.LookWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountXpointTxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.XPointTxWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -861,10 +1219,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   username?: boolean
   passwordHash?: boolean
   photoKey?: boolean
+  xpoints?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   looks?: boolean | Prisma.User$looksArgs<ExtArgs>
   store?: boolean | Prisma.User$storeArgs<ExtArgs>
+  xpointTx?: boolean | Prisma.User$xpointTxArgs<ExtArgs>
+  orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -878,6 +1239,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   passwordHash?: boolean
   photoKey?: boolean
+  xpoints?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -890,6 +1252,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   passwordHash?: boolean
   photoKey?: boolean
+  xpoints?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -902,14 +1265,17 @@ export type UserSelectScalar = {
   username?: boolean
   passwordHash?: boolean
   photoKey?: boolean
+  xpoints?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "username" | "passwordHash" | "photoKey", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "username" | "passwordHash" | "photoKey" | "xpoints", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   looks?: boolean | Prisma.User$looksArgs<ExtArgs>
   store?: boolean | Prisma.User$storeArgs<ExtArgs>
+  xpointTx?: boolean | Prisma.User$xpointTxArgs<ExtArgs>
+  orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -922,6 +1288,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     looks: Prisma.$LookPayload<ExtArgs>[]
     store: Prisma.$StorePayload<ExtArgs> | null
+    xpointTx: Prisma.$XPointTxPayload<ExtArgs>[]
+    orders: Prisma.$OrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -945,6 +1313,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
      * Storage key, not a URL — the driver decides how to serve it.
      */
     photoKey: string | null
+    /**
+     * Spendable balance. Never write this directly — go through spend()/grant()
+     * in lib/xpoints so the ledger and the balance can't drift apart.
+     */
+    xpoints: number
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1343,6 +1716,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   looks<T extends Prisma.User$looksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$looksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   store<T extends Prisma.User$storeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$storeArgs<ExtArgs>>): Prisma.Prisma__StoreClient<runtime.Types.Result.GetResult<Prisma.$StorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  xpointTx<T extends Prisma.User$xpointTxArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$xpointTxArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$XPointTxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1381,6 +1756,7 @@ export interface UserFieldRefs {
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly photoKey: Prisma.FieldRef<"User", 'String'>
+  readonly xpoints: Prisma.FieldRef<"User", 'Int'>
 }
     
 
@@ -1862,6 +2238,54 @@ export type User$storeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   include?: Prisma.StoreInclude<ExtArgs> | null
   where?: Prisma.StoreWhereInput
+}
+
+/**
+ * User.xpointTx
+ */
+export type User$xpointTxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the XPointTx
+   */
+  select?: Prisma.XPointTxSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the XPointTx
+   */
+  omit?: Prisma.XPointTxOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.XPointTxInclude<ExtArgs> | null
+  where?: Prisma.XPointTxWhereInput
+  orderBy?: Prisma.XPointTxOrderByWithRelationInput | Prisma.XPointTxOrderByWithRelationInput[]
+  cursor?: Prisma.XPointTxWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.XPointTxScalarFieldEnum | Prisma.XPointTxScalarFieldEnum[]
+}
+
+/**
+ * User.orders
+ */
+export type User$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[]
+  cursor?: Prisma.OrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
 }
 
 /**

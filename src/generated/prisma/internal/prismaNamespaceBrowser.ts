@@ -52,6 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  XPointTx: 'XPointTx',
+  Order: 'Order',
+  FreeGrant: 'FreeGrant',
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
@@ -86,10 +89,51 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   username: 'username',
   passwordHash: 'passwordHash',
-  photoKey: 'photoKey'
+  photoKey: 'photoKey',
+  xpoints: 'xpoints'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const XPointTxScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  delta: 'delta',
+  reason: 'reason',
+  balance: 'balance',
+  note: 'note',
+  createdAt: 'createdAt'
+} as const
+
+export type XPointTxScalarFieldEnum = (typeof XPointTxScalarFieldEnum)[keyof typeof XPointTxScalarFieldEnum]
+
+
+export const OrderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  razorpayOrderId: 'razorpayOrderId',
+  razorpayPaymentId: 'razorpayPaymentId',
+  packId: 'packId',
+  amountPaise: 'amountPaise',
+  xpoints: 'xpoints',
+  status: 'status',
+  createdAt: 'createdAt',
+  paidAt: 'paidAt'
+} as const
+
+export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const FreeGrantScalarFieldEnum = {
+  id: 'id',
+  fingerprint: 'fingerprint',
+  ipHash: 'ipHash',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type FreeGrantScalarFieldEnum = (typeof FreeGrantScalarFieldEnum)[keyof typeof FreeGrantScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {

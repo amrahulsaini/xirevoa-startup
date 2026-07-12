@@ -15,6 +15,7 @@ import { getObject, putObject } from "@/lib/storage";
 import { rateLimit } from "@/lib/rate-limit";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { COST, getBalance, grant, spend } from "@/lib/xpoints";
 
 export const runtime = "nodejs";
 // A layered try-on runs 20-40s. The default serverless timeout would kill it.
@@ -78,12 +79,19 @@ async function saveLook(
 export async function POST(req: NextRequest) {
   const session = await auth();
 
-  // Rate limit before parsing — a flood shouldn't get to do work.
-  // Signed-in users are limited by account, so they aren't punished for sharing
-  // an IP (offices, colleges, and most Indian mobile carriers use CGNAT).
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "local";
-  const bucket = session?.user?.id ? `user:${session.user.id}` : `ip:${ip}`;
-  const limit = rateLimit(`tryon:${bucket}`, 12, 60 * 60 * 1000);
+  // Generating costs real money (~₹13 a call), so it is not anonymous any more.
+  const userId = session?.user?.id;
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Sign in to try things on.", signin: true },
+      { status: 401 },
+    );
+  }
+
+  // Rate limited by account, not IP: XPoints are the real spend control now, and
+  // most Indian mobile traffic shares an IP via CGNAT, so an IP limit would
+  // punish unrelated users. This is just a flood guard.
+  const limit = rateLimit(`tryon:user:${userId}`, 30, 60 * 60 * 1000);
   if (!limit.ok) {
     return NextResponse.json(
       {
@@ -131,14 +139,13 @@ export async function POST(req: NextRequest) {
 
   const cached = await getObject(objectKey);
   if (cached) {
-    // Still record it — a cache hit means they re-created a look, and it should
-    // appear in their gallery whether or not we had to pay for it again.
-    if (session?.user?.id) {
-      await saveLook(session.user.id, key, objectKey, slugs);
-    }
+    // A cache hit costs us nothing, so it costs the shopper nothing. Charging
+    // for a result we already have would be indefensible.
+    await saveLook(userId, key, objectKey, slugs);
     return NextResponse.json({
       url: `/api/media/${objectKey}`,
       cached: true,
+      xpoints: await getBalance(userId),
       remaining: limit.remaining,
     });
   }
@@ -162,6 +169,22 @@ export async function POST(req: NextRequest) {
     // Unreadable header — fall back to portrait, the common case for a body shot.
   }
 
+  // Charge BEFORE generating. Debiting after would let two concurrent requests
+  // both generate on the last 7 points. spend() does the check and the decrement
+  // in one atomic statement, so it can't go negative.
+  const charge = await spend(userId, COST.tryon, "tryon", slugs.join(","));
+  if (!charge.ok) {
+    return NextResponse.json(
+      {
+        error: `You need ${COST.tryon} XPoints for a try-on and you have ${charge.balance}.`,
+        insufficient: true,
+        needed: COST.tryon,
+        xpoints: charge.balance,
+      },
+      { status: 402 },
+    );
+  }
+
   try {
     const result = await tryOn({
       person: { data: b64, mimeType },
@@ -175,14 +198,21 @@ export async function POST(req: NextRequest) {
       result.mimeType,
     );
 
-    if (session?.user?.id) {
-      await saveLook(session.user.id, key, objectKey, slugs);
-    }
+    await saveLook(userId, key, objectKey, slugs);
 
-    return NextResponse.json({ url, cached: false, remaining: limit.remaining });
+    return NextResponse.json({
+      url,
+      cached: false,
+      xpoints: charge.balance,
+      remaining: limit.remaining,
+    });
   } catch (err) {
     const message = (err as Error).message;
     console.error("[tryon]", message);
+
+    // They paid for an image they never got. Give it back — nobody should lose
+    // points to our outage or to a model refusal.
+    const refunded = await grant(userId, COST.tryon, "refund", "Failed try-on");
 
     // Gemini blocks generations it considers unsafe. That's a user-actionable
     // problem (usually a photo it won't process), not a server fault.
@@ -190,13 +220,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "We couldn't process that photo. Try a clear, well-lit, full-body shot of one person.",
+            "We couldn't process that photo. Try a clear, well-lit, full-body shot of one person. Your XPoints were not charged.",
+          xpoints: refunded,
         },
         { status: 422 },
       );
     }
     return NextResponse.json(
-      { error: "The fitting room is busy. Please try again in a moment." },
+      {
+        error:
+          "The fitting room is busy. Please try again in a moment. Your XPoints were not charged.",
+        xpoints: refunded,
+      },
       { status: 502 },
     );
   }
