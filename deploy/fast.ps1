@@ -11,7 +11,11 @@
 # PowerShell rather than bash because gcloud's plink transport fails under Git
 # Bash's pseudo-TTY on this machine.
 
-$ErrorActionPreference = 'Stop'
+# NOT 'Stop': gcloud and npm write progress to stderr, and PowerShell turns any
+# stderr from a native command into a terminating NativeCommandError. With 'Stop'
+# this script "fails" on every successful deploy. We decide success from the
+# DEPLOY_DONE marker the remote script prints, which is the only honest signal.
+$ErrorActionPreference = 'Continue'
 $env:PATH += ";$env:LOCALAPPDATA\Google\Cloud SDK\google-cloud-sdk\bin"
 
 $ZONE = 'asia-south1-c'
@@ -64,15 +68,31 @@ $lf = Join-Path $env:TEMP 'remote-fast.sh'
 gcloud compute scp $lf "${VM}:/tmp/remote-fast.sh" --zone=$ZONE --project=$PROJECT --quiet | Out-Null
 Remove-Item $lf -Force
 
-gcloud compute ssh $VM --zone=$ZONE --project=$PROJECT --quiet --command='bash /tmp/remote-fast.sh' 2>&1 |
-  Select-String 'Compiled|Failed|error|active|inactive|local health|DEPLOY_DONE|assets|lockfile|dependencies|garments'
+$log = gcloud compute ssh $VM --zone=$ZONE --project=$PROJECT --quiet `
+  --command='bash /tmp/remote-fast.sh' 2>&1 | Out-String
 
-# Record the asset hash only after a successful deploy.
-if ($assetsChanged) {
+$log -split "`n" |
+  Select-String 'Compiled|Failed|Error:|error TS|active|inactive|local health|DEPLOY_DONE|assets |lockfile|dependencies|garments' |
+  ForEach-Object { Write-Host "   $_" }
+
+# The remote script only prints DEPLOY_DONE after the build succeeded, the schema
+# pushed and the service came back healthy. That marker — not PowerShell's exit
+# code — is what tells us this worked.
+$ok = $log -match 'DEPLOY_DONE'
+
+if ($ok -and $assetsChanged) {
   gcloud compute ssh $VM --zone=$ZONE --project=$PROJECT --quiet `
     --command="echo $localHash | sudo -u xirevoa tee /srv/xirevoa/.deploy-public-hash >/dev/null" 2>$null | Out-Null
 }
 
 $sw.Stop()
-Write-Host ("==> done in {0:N0}s" -f $sw.Elapsed.TotalSeconds)
 Pop-Location
+
+if ($ok) {
+  Write-Host ("==> DEPLOYED in {0:N0}s" -f $sw.Elapsed.TotalSeconds) -ForegroundColor Green
+  exit 0
+}
+
+Write-Host '==> DEPLOY FAILED — the service was left running on the previous build.' -ForegroundColor Red
+Write-Host $log
+exit 1
