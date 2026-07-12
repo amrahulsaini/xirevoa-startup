@@ -7,10 +7,34 @@ import { haircutBySlug, HAIRCUTS, type FaceShape } from "@/lib/haircuts";
 import { getObject, putObject } from "@/lib/storage";
 import { rateLimit } from "@/lib/rate-limit";
 import { auth } from "@/auth";
+import { prisma } from "@/lib/db";
 import { COST, getBalance, grant, spend } from "@/lib/xpoints";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
+
+/**
+ * Persist the haircut so it shows up in /looks.
+ *
+ * Best-effort: the user already has the image, and losing a gallery row isn't
+ * worth discarding a generation they waited for and we paid for.
+ */
+async function saveHaircut(
+  userId: string,
+  cacheKeyValue: string,
+  imageKey: string,
+  title: string,
+) {
+  try {
+    await prisma.look.upsert({
+      where: { cacheKey: cacheKeyValue },
+      create: { userId, kind: "haircut", title, cacheKey: cacheKeyValue, imageKey },
+      update: {},
+    });
+  } catch (err) {
+    console.error("[salon] could not save look:", (err as Error).message);
+  }
+}
 
 const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 
@@ -83,6 +107,7 @@ export async function POST(req: NextRequest) {
 
   const cached = await getObject(objectKey);
   if (cached) {
+    await saveHaircut(userId, key, objectKey, cut.name);
     return NextResponse.json({
       url: `/api/media/${objectKey}`,
       cut: { slug: cut.slug, name: cut.name },
@@ -125,6 +150,8 @@ export async function POST(req: NextRequest) {
       Buffer.from(result.data, "base64"),
       result.mimeType,
     );
+
+    await saveHaircut(userId, key, objectKey, cut.name);
 
     return NextResponse.json({
       url,

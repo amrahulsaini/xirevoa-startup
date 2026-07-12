@@ -1379,6 +1379,8 @@ export type GarmentScalarFieldEnum = (typeof GarmentScalarFieldEnum)[keyof typeo
 export const LookScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  kind: 'kind',
+  title: 'title',
   imageKey: 'imageKey',
   cacheKey: 'cacheKey',
   shared: 'shared',
@@ -1529,6 +1531,20 @@ export type ListEnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'LookKind'
+ */
+export type EnumLookKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LookKind'>
+    
+
+
+/**
+ * Reference to a field of type 'LookKind[]'
+ */
+export type ListEnumLookKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LookKind[]'>
     
 
 

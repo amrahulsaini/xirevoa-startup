@@ -124,10 +124,14 @@ export function Salon() {
       setStage("done");
       router.refresh();
 
+      // /looks, not /salon — the haircut is saved there, and this page's state is
+      // long gone by the time they click through from another tab.
       pushNote({
         title: "Your new look is ready",
-        body: data.cut?.name ? `${data.cut.name} — see how it suits you.` : "Your haircut is ready.",
-        href: "/salon",
+        body: data.cut?.name
+          ? `${data.cut.name} — see how it suits you.`
+          : "Your haircut is ready.",
+        href: "/looks",
       });
     } catch {
       setError("Couldn't reach the salon. Check your connection.");

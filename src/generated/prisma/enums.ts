@@ -38,10 +38,21 @@ export const Category = {
   dress: 'dress',
   shoes: 'shoes',
   glasses: 'glasses',
-  jewellery: 'jewellery'
+  jewellery: 'jewellery',
+  tops: 'tops',
+  kurti: 'kurti',
+  formal: 'formal'
 } as const
 
 export type Category = (typeof Category)[keyof typeof Category]
+
+
+export const LookKind = {
+  tryon: 'tryon',
+  haircut: 'haircut'
+} as const
+
+export type LookKind = (typeof LookKind)[keyof typeof LookKind]
 
 
 export const StoreStatus = {

@@ -171,6 +171,10 @@ enum Category {
   shoes
   glasses
   jewellery
+  // Women's
+  tops
+  kurti
+  formal
 }
 
 /// A garment a shopper can try on.
@@ -208,16 +212,31 @@ model Garment {
 
 /// ──────────────────────────────── Looks ───────────────────────────────
 
-/// One completed try-on: a person + the garments they wore + the result.
+enum LookKind {
+  tryon
+  haircut
+}
+
+/// One completed generation — an outfit try-on OR a haircut.
+///
+/// Both live in one table because to the user they're the same thing: "a picture
+/// of me that Xirevoa made". Keeping haircuts out of here is exactly why a Salon
+/// notification used to lead nowhere — the image was never saved at all.
 model Look {
   id     String @id @default(cuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  kind LookKind @default(tryon)
+
+  /// For haircuts, the style name ("Man Bun"). Outfits describe themselves via
+  /// their garments, so this stays null for them.
+  title String?
+
   /// Storage key of the generated image.
   imageKey String
 
-  /// Hash of (photo + garments). Lets us serve a repeat request from storage
+  /// Hash of (photo + garments/cut). Lets us serve a repeat request from storage
   /// instead of paying Gemini for an image we already have.
   cacheKey String @unique
 
@@ -229,6 +248,7 @@ model Look {
   garments LookGarment[]
 
   @@index([userId, createdAt])
+  @@index([userId, kind])
 }
 
 model LookGarment {
