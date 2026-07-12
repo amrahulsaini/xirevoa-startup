@@ -62,7 +62,7 @@ export function CollectionGrid({ initialCategory }: { initialCategory: string })
                 href={`/studio?add=${item.slug}`}
                 className="group block"
               >
-                <div className="relative aspect-square overflow-hidden rounded-xl bg-bone-50">
+                <div className="relative aspect-square overflow-hidden rounded-xl bg-product">
                   <Image
                     src={item.image}
                     alt={item.name}

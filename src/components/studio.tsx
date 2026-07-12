@@ -468,7 +468,7 @@ function LookStack({
                 onClick={() => onRemove(slug)}
                 className="hairline group flex items-center gap-2 rounded-full border bg-ink-900 py-1.5 pr-3 pl-1.5 text-sm text-bone-200 transition-colors hover:border-flare-rose/50"
               >
-                <span className="relative size-7 overflow-hidden rounded-full bg-bone-50">
+                <span className="relative size-7 overflow-hidden rounded-full bg-product">
                   <Image src={item.image} alt="" fill sizes="28px" className="object-cover" />
                 </span>
                 {item.name}
@@ -506,7 +506,7 @@ function GarmentCard({
     >
       <div
         className={cn(
-          "relative aspect-square overflow-hidden rounded-xl bg-bone-50 ring-2 transition-all duration-300",
+          "relative aspect-square overflow-hidden rounded-xl bg-product ring-2 transition-all duration-300",
           selected ? "ring-flare-rose" : "ring-transparent hover:ring-bone-100/20",
         )}
       >

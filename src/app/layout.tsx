@@ -4,6 +4,8 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Grain } from "@/components/grain";
+import { themeScript } from "@/components/theme";
+import { auth, signOut } from "@/auth";
 
 const instrument = Instrument_Serif({
   weight: "400",
@@ -50,14 +52,39 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // Read the session here rather than wrapping the app in a client-side
+  // SessionProvider — the navbar is the only thing that needs it, and this
+  // keeps the session out of the client bundle entirely.
+  const session = await auth();
+
   return (
-    <html lang="en" className={`${instrument.variable} ${inter.variable}`}>
+    // suppressHydrationWarning: the inline script stamps data-theme on <html>
+    // before React hydrates, so this element legitimately differs from the SSR output.
+    <html
+      lang="en"
+      data-theme="dark"
+      suppressHydrationWarning
+      className={`${instrument.variable} ${inter.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-dvh bg-ink-950 text-bone-100 antialiased">
         <Grain />
-        <Navbar />
+        <Navbar
+          user={
+            session?.user
+              ? { name: session.user.name, image: session.user.image }
+              : null
+          }
+          signOutAction={async () => {
+            "use server";
+            await signOut({ redirectTo: "/" });
+          }}
+        />
         <main>{children}</main>
         <Footer />
       </body>

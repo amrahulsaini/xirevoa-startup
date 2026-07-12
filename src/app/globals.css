@@ -29,6 +29,10 @@
   --color-flare-rose: #e8367a;
   --color-flare-violet: #7c3aed;
 
+  /* Product surface. Garment flat-lays are shot on white, so their card must
+     stay light in BOTH themes — it is not part of the inverting surface scale. */
+  --color-product: #faf8f4;
+
   --font-display: var(--font-instrument), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
@@ -37,10 +41,53 @@
   --ease-swift: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Light mode ───────────────────────────────────────────────────────────
+   `ink-*` is the SURFACE scale, `bone-*` is the CONTENT scale. In light mode
+   they swap ends: surfaces go warm-white, content goes near-black. Components
+   keep their existing class names — only the token values move.
+
+   Only one selector is needed because the inline script in layout.tsx always
+   stamps data-theme on <html> before first paint (resolving "system" itself),
+   so there is no prefers-color-scheme fallback to maintain here.
+   ───────────────────────────────────────────────────────────────────────── */
+:root[data-theme="light"] {
+  --color-ink-950: #faf8f4;
+  --color-ink-900: #f3f0e9;
+  --color-ink-800: #ebe7dd;
+  --color-ink-700: #ddd8ca;
+  --color-ink-600: #c4beae;
+  --color-ink-500: #a49d8f;
+
+  --color-bone-50: #0b0b0d;
+  --color-bone-100: #17171c;
+  --color-bone-200: #2c2c34;
+  --color-bone-300: #4e4e58;
+  --color-bone-400: #6f6b62;
+  --color-bone-500: #918c82;
+
+  /* Amber and violet are too light to hold their own on a white canvas;
+     the gradient is darkened so display type keeps its contrast. */
+  --color-flare-amber: #c2740a;
+  --color-flare-rose: #d81b6a;
+  --color-flare-violet: #6d28d9;
+
+  --color-product: #ffffff;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Cross-fade the whole canvas when the theme flips, so the toggle feels
+     like a dimmer rather than a hard cut. */
+  body,
+  body * {
+    transition:
+      background-color 400ms var(--ease-swift),
+      border-color 400ms var(--ease-swift),
+      color 400ms var(--ease-swift);
   }
 
   body {

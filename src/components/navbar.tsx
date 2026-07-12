@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Menu, X, Sparkles } from "lucide-react";
-import { Wordmark } from "./wordmark";
+import { Logo } from "./logo";
+import { ThemeToggle } from "./theme";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
@@ -15,7 +16,18 @@ const LINKS = [
   { href: "/stores", label: "For Stores" },
 ];
 
-export function Navbar() {
+export interface NavUser {
+  name?: string | null;
+  image?: string | null;
+}
+
+export function Navbar({
+  user,
+  signOutAction,
+}: {
+  user: NavUser | null;
+  signOutAction: () => Promise<void>;
+}) {
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const [condensed, setCondensed] = useState(false);
@@ -68,7 +80,7 @@ export function Navbar() {
           )}
         >
           <Link href="/" className="shrink-0 px-3 text-base" aria-label="Xirevoa home">
-            <Wordmark />
+            <Logo gradientId="flare-nav" />
           </Link>
 
           {/* Desktop links + the sliding indicator pill */}
@@ -111,6 +123,19 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
+
+            {user ? (
+              <AccountMenu user={user} signOutAction={signOutAction} />
+            ) : (
+              <Link
+                href="/signin"
+                className="hidden px-3 py-2 text-sm text-bone-300 transition-colors hover:text-bone-50 sm:block"
+              >
+                Sign in
+              </Link>
+            )}
+
             <Link
               href="/studio"
               className="group hidden items-center gap-2 rounded-full bg-bone-100 px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform duration-300 hover:scale-[1.03] active:scale-95 sm:flex"
@@ -176,5 +201,94 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+/* ─────────────────────────────── Account ──────────────────────────────── */
+
+/**
+ * Avatar with a sign-out dropdown.
+ *
+ * Sign-out runs as a server action rather than a client fetch, so the session
+ * cookie is cleared and the layout re-renders in one round trip.
+ */
+function AccountMenu({
+  user,
+  signOutAction,
+}: {
+  user: NavUser;
+  signOutAction: () => Promise<void>;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Any click outside, or Escape, dismisses the menu.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const initial = user.name?.trim()?.[0]?.toUpperCase() ?? "?";
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label="Account menu"
+        className="grid size-9 place-items-center overflow-hidden rounded-full bg-ink-700 text-sm font-medium text-bone-100 ring-2 ring-transparent transition-all hover:ring-bone-100/20"
+      >
+        {user.image ? (
+          // eslint-disable-next-line @next/next/no-img-element -- remote avatar from the OAuth provider
+          <img src={user.image} alt="" className="size-full object-cover" />
+        ) : (
+          initial
+        )}
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="menu"
+            initial={{ opacity: 0, y: -8, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.96 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="glass hairline absolute right-0 mt-3 w-48 overflow-hidden rounded-2xl border p-1.5 shadow-2xl shadow-black/40"
+          >
+            {user.name && (
+              <p className="truncate px-3 py-2 text-xs text-bone-400">{user.name}</p>
+            )}
+            <Link
+              href="/looks"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="block rounded-xl px-3 py-2.5 text-sm text-bone-200 transition-colors hover:bg-bone-100/8 hover:text-bone-50"
+            >
+              Your Looks
+            </Link>
+            <form action={signOutAction}>
+              <button
+                type="submit"
+                role="menuitem"
+                className="w-full rounded-xl px-3 py-2.5 text-left text-sm text-bone-200 transition-colors hover:bg-bone-100/8 hover:text-bone-50"
+              >
+                Sign out
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
