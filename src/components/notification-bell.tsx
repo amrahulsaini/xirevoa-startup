@@ -84,7 +84,11 @@ export function NotificationBell() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.96 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="glass-strong hairline absolute right-0 mt-3 w-[19rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border shadow-2xl shadow-black/40"
+            // On phones this used to be `absolute right-0`, anchored to a bell
+            // sitting near the middle of a narrow navbar — so a 19rem panel spilled
+            // off the left edge of the screen and was unreadable. Below `sm` it is
+            // pinned to the viewport instead of the button.
+            className="glass-strong hairline fixed inset-x-3 top-20 z-50 overflow-hidden rounded-2xl border shadow-2xl shadow-black/40 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-[19rem]"
           >
             <div className="hairline flex items-center justify-between border-b px-4 py-3">
               <span className="text-xs tracking-[0.18em] text-bone-400 uppercase">
