@@ -1,11 +1,15 @@
 import { cn } from "@/lib/cn";
 
 /**
- * The Xirevoa mark.
+ * The Xirevoa mark: a ribbon monogram X.
  *
- * A gradient tile with the X knocked out of it. The solid shape is what makes
- * it survive at 16px in a browser tab — a mark made of thin strokes turns to
- * mush at that size.
+ * Two thick crossing bars with mitred ends. The "folded ribbon" quality comes
+ * from shading facets, NOT from cutting voids out of the arms — an earlier
+ * version carved chevrons out and the mark read as shattered rather than
+ * folded. Solid geometry, shaded.
+ *
+ * Built as real vector geometry (not a traced bitmap) so it stays crisp at any
+ * size and picks up the theme's gradient tokens.
  *
  * `gradientId` must be unique per instance. Two SVGs on one page sharing a
  * <linearGradient> id means the second silently inherits the first's fill.
@@ -17,7 +21,7 @@ export function LogoMark({
   className?: string;
   gradientId?: string;
 }) {
-  const maskId = `${gradientId}-mask`;
+  const clipId = `${gradientId}-clip`;
 
   return (
     <svg
@@ -31,38 +35,31 @@ export function LogoMark({
       <defs>
         <linearGradient
           id={gradientId}
-          x1="0"
-          y1="0"
-          x2="32"
-          y2="32"
+          x1="3"
+          y1="3"
+          x2="29"
+          y2="29"
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="var(--color-flare-amber)" />
-          <stop offset="0.52" stopColor="var(--color-flare-rose)" />
+          <stop offset="0.5" stopColor="var(--color-flare-rose)" />
           <stop offset="1" stopColor="var(--color-flare-violet)" />
         </linearGradient>
 
-        {/* White = keep, black = cut. The X is cut straight out of the tile, so
-            the canvas shows through it — the mark never needs to know what
-            colour it's sitting on. */}
-        <mask id={maskId}>
-          <rect width="32" height="32" rx="8" fill="white" />
-          <path
-            d="M11 11 L21 21 M21 11 L11 21"
-            stroke="black"
-            strokeWidth="3.4"
-            strokeLinecap="round"
-          />
-        </mask>
+        {/* Confines the fold shading to the X itself, so the facets can be drawn
+            as simple rectangles without spilling outside the mark. */}
+        <clipPath id={clipId}>
+          <path d="M3 3h7.6L29 29h-7.6L3 3Z" />
+          <path d="M29 3h-7.6L3 29h7.6L29 3Z" />
+        </clipPath>
       </defs>
 
-      <rect
-        width="32"
-        height="32"
-        rx="8"
-        fill={`url(#${gradientId})`}
-        mask={`url(#${maskId})`}
-      />
+      <g clipPath={`url(#${clipId})`}>
+        <rect width="32" height="32" fill={`url(#${gradientId})`} />
+        {/* The fold: the right half of each ribbon sits fractionally in shadow. */}
+        <path d="M16 0h16v32H16z" fill="#000" opacity="0.13" />
+        <path d="M0 16h32v16H0z" fill="#000" opacity="0.07" />
+      </g>
     </svg>
   );
 }

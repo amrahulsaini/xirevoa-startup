@@ -1,18 +1,22 @@
 <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Standalone favicon: same mark as <LogoMark>, with the Flare colours
-       hardcoded. A favicon is fetched outside the page, so it cannot resolve
-       the CSS custom properties the component version uses.
-       The X is cut out, so the mark reads on light and dark browser chrome. -->
+  <!-- Standalone favicon: the same ribbon-X as <LogoMark>, with the Flare colours
+       hardcoded. A favicon is fetched outside the page, so it cannot resolve the
+       CSS custom properties the component version uses.
+       Transparent background so it reads on light and dark browser chrome. -->
   <defs>
-    <linearGradient id="f" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+    <linearGradient id="f" x1="3" y1="3" x2="29" y2="29" gradientUnits="userSpaceOnUse">
       <stop stop-color="#F5A524"/>
-      <stop offset="0.52" stop-color="#E8367A"/>
+      <stop offset="0.5" stop-color="#E8367A"/>
       <stop offset="1" stop-color="#7C3AED"/>
     </linearGradient>
-    <mask id="m">
-      <rect width="32" height="32" rx="8" fill="white"/>
-      <path d="M11 11 L21 21 M21 11 L11 21" stroke="black" stroke-width="3.4" stroke-linecap="round"/>
-    </mask>
+    <clipPath id="c">
+      <path d="M3 3h7.6L29 29h-7.6L3 3Z"/>
+      <path d="M29 3h-7.6L3 29h7.6L29 3Z"/>
+    </clipPath>
   </defs>
-  <rect width="32" height="32" rx="8" fill="url(#f)" mask="url(#m)"/>
+  <g clip-path="url(#c)">
+    <rect width="32" height="32" fill="url(#f)"/>
+    <path d="M16 0h16v32H16z" fill="#000" opacity="0.13"/>
+    <path d="M0 16h32v16H0z" fill="#000" opacity="0.07"/>
+  </g>
 </svg>
