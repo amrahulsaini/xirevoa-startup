@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Studio } from "@/components/studio";
+import { gateUsername } from "@/lib/session";
 
 export const metadata: Metadata = {
   title: "Try-On Studio",
@@ -12,7 +13,9 @@ export default async function StudioPage({
 }: {
   searchParams: Promise<{ add?: string }>;
 }) {
-  // Deep link from a collection card: /studio?add=tiger-tee pre-selects the piece.
   const { add } = await searchParams;
+  // Usable signed out, but a signed-in user without a username picks one first.
+  await gateUsername(`/studio${add ? `?add=${add}` : ""}`);
+  // Deep link from a collection card: /studio?add=tiger-tee pre-selects the piece.
   return <Studio initialSlug={add} />;
 }

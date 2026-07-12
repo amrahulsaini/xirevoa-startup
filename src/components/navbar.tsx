@@ -265,8 +265,16 @@ function AccountMenu({
             className="glass hairline absolute right-0 mt-3 w-48 overflow-hidden rounded-2xl border p-1.5 shadow-2xl shadow-black/40"
           >
             {user.name && (
-              <p className="truncate px-3 py-2 text-xs text-bone-400">{user.name}</p>
+              <p className="truncate px-3 py-2 text-xs text-bone-400">@{user.name}</p>
             )}
+            <Link
+              href="/account"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="block rounded-xl px-3 py-2.5 text-sm text-bone-200 transition-colors hover:bg-bone-100/8 hover:text-bone-50"
+            >
+              Profile
+            </Link>
             <Link
               href="/looks"
               role="menuitem"

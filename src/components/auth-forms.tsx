@@ -32,16 +32,23 @@ export function SignInForm({
   googleAction,
   showGoogle,
   next,
+  notice,
 }: {
   googleAction: () => Promise<void>;
   showGoogle: boolean;
   next: string;
+  notice?: string;
 }) {
   const [state, formAction] = useActionState<AuthState, FormData>(login, null);
   useRedirectOnSuccess(state);
 
   return (
     <div className="mt-8">
+      {notice && (
+        <p className="hairline mb-6 rounded-xl border bg-flare-rose/5 px-4 py-3 text-sm text-bone-200">
+          {notice}
+        </p>
+      )}
       {showGoogle && (
         <>
           <form action={googleAction}>

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import { Shirt } from "lucide-react";
-import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { requireUser } from "@/lib/session";
 import { Reveal } from "@/components/reveal";
 
 export const metadata: Metadata = {
@@ -13,11 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function LooksPage() {
-  const session = await auth();
-  if (!session?.user?.id) redirect("/signin?next=/looks");
+  const user = await requireUser("/looks");
 
   const looks = await prisma.look.findMany({
-    where: { userId: session.user.id },
+    where: { userId: user.id },
     orderBy: { createdAt: "desc" },
     include: { garments: { include: { garment: true } } },
     take: 60,

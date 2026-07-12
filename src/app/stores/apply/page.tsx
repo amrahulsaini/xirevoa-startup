@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { z } from "zod";
-import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { requireUser } from "@/lib/session";
 import { Aurora } from "@/components/aurora";
 import { Reveal } from "@/components/reveal";
 import { StoreForm } from "@/components/store-form";
@@ -35,9 +34,7 @@ function slugify(name: string) {
 }
 
 export default async function ApplyPage() {
-  const session = await auth();
-  if (!session?.user?.id) redirect("/signin?next=/stores/apply");
-  const userId = session.user.id;
+  const { id: userId } = await requireUser("/stores/apply");
 
   const existing = await prisma.store.findUnique({ where: { userId } });
 
