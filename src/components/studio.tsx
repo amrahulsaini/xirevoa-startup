@@ -170,10 +170,13 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
       setResult(data.url);
       setStage("done");
       if (typeof data.xpoints === "number") router.refresh();
+      // Point at where the image is SAVED, not back at the generator — the
+      // Studio's in-memory state is gone by the time they click a notification
+      // from another tab, so sending them here showed them nothing.
       pushNote({
         title: "Your look is ready",
         body: names ? `You're wearing ${names}.` : "Your try-on is ready to view.",
-        href: "/studio",
+        href: "/looks",
       });
     } catch {
       setError("Couldn't reach the fitting room. Check your connection.");

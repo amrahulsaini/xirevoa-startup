@@ -96,7 +96,11 @@ export type VerificationToken = Prisma.VerificationTokenModel
 export type Garment = Prisma.GarmentModel
 /**
  * Model Look
- * One completed try-on: a person + the garments they wore + the result.
+ * One completed generation — an outfit try-on OR a haircut.
+ * 
+ * Both live in one table because to the user they're the same thing: "a picture
+ * of me that Xirevoa made". Keeping haircuts out of here is exactly why a Salon
+ * notification used to lead nowhere — the image was never saved at all.
  */
 export type Look = Prisma.LookModel
 /**

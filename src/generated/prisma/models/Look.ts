@@ -14,7 +14,11 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Look
- * One completed try-on: a person + the garments they wore + the result.
+ * One completed generation — an outfit try-on OR a haircut.
+ * 
+ * Both live in one table because to the user they're the same thing: "a picture
+ * of me that Xirevoa made". Keeping haircuts out of here is exactly why a Salon
+ * notification used to lead nowhere — the image was never saved at all.
  */
 export type LookModel = runtime.Types.Result.DefaultSelection<Prisma.$LookPayload>
 
@@ -27,6 +31,8 @@ export type AggregateLook = {
 export type LookMinAggregateOutputType = {
   id: string | null
   userId: string | null
+  kind: $Enums.LookKind | null
+  title: string | null
   imageKey: string | null
   cacheKey: string | null
   shared: boolean | null
@@ -36,6 +42,8 @@ export type LookMinAggregateOutputType = {
 export type LookMaxAggregateOutputType = {
   id: string | null
   userId: string | null
+  kind: $Enums.LookKind | null
+  title: string | null
   imageKey: string | null
   cacheKey: string | null
   shared: boolean | null
@@ -45,6 +53,8 @@ export type LookMaxAggregateOutputType = {
 export type LookCountAggregateOutputType = {
   id: number
   userId: number
+  kind: number
+  title: number
   imageKey: number
   cacheKey: number
   shared: number
@@ -56,6 +66,8 @@ export type LookCountAggregateOutputType = {
 export type LookMinAggregateInputType = {
   id?: true
   userId?: true
+  kind?: true
+  title?: true
   imageKey?: true
   cacheKey?: true
   shared?: true
@@ -65,6 +77,8 @@ export type LookMinAggregateInputType = {
 export type LookMaxAggregateInputType = {
   id?: true
   userId?: true
+  kind?: true
+  title?: true
   imageKey?: true
   cacheKey?: true
   shared?: true
@@ -74,6 +88,8 @@ export type LookMaxAggregateInputType = {
 export type LookCountAggregateInputType = {
   id?: true
   userId?: true
+  kind?: true
+  title?: true
   imageKey?: true
   cacheKey?: true
   shared?: true
@@ -156,6 +172,8 @@ export type LookGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type LookGroupByOutputType = {
   id: string
   userId: string
+  kind: $Enums.LookKind
+  title: string | null
   imageKey: string
   cacheKey: string
   shared: boolean
@@ -186,6 +204,8 @@ export type LookWhereInput = {
   NOT?: Prisma.LookWhereInput | Prisma.LookWhereInput[]
   id?: Prisma.StringFilter<"Look"> | string
   userId?: Prisma.StringFilter<"Look"> | string
+  kind?: Prisma.EnumLookKindFilter<"Look"> | $Enums.LookKind
+  title?: Prisma.StringNullableFilter<"Look"> | string | null
   imageKey?: Prisma.StringFilter<"Look"> | string
   cacheKey?: Prisma.StringFilter<"Look"> | string
   shared?: Prisma.BoolFilter<"Look"> | boolean
@@ -197,6 +217,8 @@ export type LookWhereInput = {
 export type LookOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  title?: Prisma.SortOrderInput | Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
@@ -212,6 +234,8 @@ export type LookWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LookWhereInput[]
   NOT?: Prisma.LookWhereInput | Prisma.LookWhereInput[]
   userId?: Prisma.StringFilter<"Look"> | string
+  kind?: Prisma.EnumLookKindFilter<"Look"> | $Enums.LookKind
+  title?: Prisma.StringNullableFilter<"Look"> | string | null
   imageKey?: Prisma.StringFilter<"Look"> | string
   shared?: Prisma.BoolFilter<"Look"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Look"> | Date | string
@@ -222,6 +246,8 @@ export type LookWhereUniqueInput = Prisma.AtLeast<{
 export type LookOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  title?: Prisma.SortOrderInput | Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
@@ -237,6 +263,8 @@ export type LookScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LookScalarWhereWithAggregatesInput | Prisma.LookScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Look"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Look"> | string
+  kind?: Prisma.EnumLookKindWithAggregatesFilter<"Look"> | $Enums.LookKind
+  title?: Prisma.StringNullableWithAggregatesFilter<"Look"> | string | null
   imageKey?: Prisma.StringWithAggregatesFilter<"Look"> | string
   cacheKey?: Prisma.StringWithAggregatesFilter<"Look"> | string
   shared?: Prisma.BoolWithAggregatesFilter<"Look"> | boolean
@@ -245,6 +273,8 @@ export type LookScalarWhereWithAggregatesInput = {
 
 export type LookCreateInput = {
   id?: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -256,6 +286,8 @@ export type LookCreateInput = {
 export type LookUncheckedCreateInput = {
   id?: string
   userId: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -265,6 +297,8 @@ export type LookUncheckedCreateInput = {
 
 export type LookUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -276,6 +310,8 @@ export type LookUpdateInput = {
 export type LookUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -286,6 +322,8 @@ export type LookUncheckedUpdateInput = {
 export type LookCreateManyInput = {
   id?: string
   userId: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -294,6 +332,8 @@ export type LookCreateManyInput = {
 
 export type LookUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -303,6 +343,8 @@ export type LookUpdateManyMutationInput = {
 export type LookUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -322,6 +364,8 @@ export type LookOrderByRelationAggregateInput = {
 export type LookCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
@@ -331,6 +375,8 @@ export type LookCountOrderByAggregateInput = {
 export type LookMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
@@ -340,6 +386,8 @@ export type LookMaxOrderByAggregateInput = {
 export type LookMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
@@ -393,6 +441,10 @@ export type LookUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.LookScalarWhereInput | Prisma.LookScalarWhereInput[]
 }
 
+export type EnumLookKindFieldUpdateOperationsInput = {
+  set?: $Enums.LookKind
+}
+
 export type LookCreateNestedOneWithoutGarmentsInput = {
   create?: Prisma.XOR<Prisma.LookCreateWithoutGarmentsInput, Prisma.LookUncheckedCreateWithoutGarmentsInput>
   connectOrCreate?: Prisma.LookCreateOrConnectWithoutGarmentsInput
@@ -409,6 +461,8 @@ export type LookUpdateOneRequiredWithoutGarmentsNestedInput = {
 
 export type LookCreateWithoutUserInput = {
   id?: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -418,6 +472,8 @@ export type LookCreateWithoutUserInput = {
 
 export type LookUncheckedCreateWithoutUserInput = {
   id?: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -457,6 +513,8 @@ export type LookScalarWhereInput = {
   NOT?: Prisma.LookScalarWhereInput | Prisma.LookScalarWhereInput[]
   id?: Prisma.StringFilter<"Look"> | string
   userId?: Prisma.StringFilter<"Look"> | string
+  kind?: Prisma.EnumLookKindFilter<"Look"> | $Enums.LookKind
+  title?: Prisma.StringNullableFilter<"Look"> | string | null
   imageKey?: Prisma.StringFilter<"Look"> | string
   cacheKey?: Prisma.StringFilter<"Look"> | string
   shared?: Prisma.BoolFilter<"Look"> | boolean
@@ -465,6 +523,8 @@ export type LookScalarWhereInput = {
 
 export type LookCreateWithoutGarmentsInput = {
   id?: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -475,6 +535,8 @@ export type LookCreateWithoutGarmentsInput = {
 export type LookUncheckedCreateWithoutGarmentsInput = {
   id?: string
   userId: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -499,6 +561,8 @@ export type LookUpdateToOneWithWhereWithoutGarmentsInput = {
 
 export type LookUpdateWithoutGarmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -509,6 +573,8 @@ export type LookUpdateWithoutGarmentsInput = {
 export type LookUncheckedUpdateWithoutGarmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -517,6 +583,8 @@ export type LookUncheckedUpdateWithoutGarmentsInput = {
 
 export type LookCreateManyUserInput = {
   id?: string
+  kind?: $Enums.LookKind
+  title?: string | null
   imageKey: string
   cacheKey: string
   shared?: boolean
@@ -525,6 +593,8 @@ export type LookCreateManyUserInput = {
 
 export type LookUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -534,6 +604,8 @@ export type LookUpdateWithoutUserInput = {
 
 export type LookUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -543,6 +615,8 @@ export type LookUncheckedUpdateWithoutUserInput = {
 
 export type LookUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumLookKindFieldUpdateOperationsInput | $Enums.LookKind
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -583,6 +657,8 @@ export type LookCountOutputTypeCountGarmentsArgs<ExtArgs extends runtime.Types.E
 export type LookSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  kind?: boolean
+  title?: boolean
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
@@ -595,6 +671,8 @@ export type LookSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type LookSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  kind?: boolean
+  title?: boolean
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
@@ -605,6 +683,8 @@ export type LookSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type LookSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  kind?: boolean
+  title?: boolean
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
@@ -615,13 +695,15 @@ export type LookSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type LookSelectScalar = {
   id?: boolean
   userId?: boolean
+  kind?: boolean
+  title?: boolean
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
   createdAt?: boolean
 }
 
-export type LookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "imageKey" | "cacheKey" | "shared" | "createdAt", ExtArgs["result"]["look"]>
+export type LookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "kind" | "title" | "imageKey" | "cacheKey" | "shared" | "createdAt", ExtArgs["result"]["look"]>
 export type LookInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   garments?: boolean | Prisma.Look$garmentsArgs<ExtArgs>
@@ -643,12 +725,18 @@ export type $LookPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
+    kind: $Enums.LookKind
+    /**
+     * For haircuts, the style name ("Man Bun"). Outfits describe themselves via
+     * their garments, so this stays null for them.
+     */
+    title: string | null
     /**
      * Storage key of the generated image.
      */
     imageKey: string
     /**
-     * Hash of (photo + garments). Lets us serve a repeat request from storage
+     * Hash of (photo + garments/cut). Lets us serve a repeat request from storage
      * instead of paying Gemini for an image we already have.
      */
     cacheKey: string
@@ -1085,6 +1173,8 @@ export interface Prisma__LookClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface LookFieldRefs {
   readonly id: Prisma.FieldRef<"Look", 'String'>
   readonly userId: Prisma.FieldRef<"Look", 'String'>
+  readonly kind: Prisma.FieldRef<"Look", 'LookKind'>
+  readonly title: Prisma.FieldRef<"Look", 'String'>
   readonly imageKey: Prisma.FieldRef<"Look", 'String'>
   readonly cacheKey: Prisma.FieldRef<"Look", 'String'>
   readonly shared: Prisma.FieldRef<"Look", 'Boolean'>

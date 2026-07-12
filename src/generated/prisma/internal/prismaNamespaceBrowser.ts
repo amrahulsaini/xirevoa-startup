@@ -192,6 +192,8 @@ export type GarmentScalarFieldEnum = (typeof GarmentScalarFieldEnum)[keyof typeo
 export const LookScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  kind: 'kind',
+  title: 'title',
   imageKey: 'imageKey',
   cacheKey: 'cacheKey',
   shared: 'shared',

@@ -253,6 +253,23 @@ export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type EnumLookKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.LookKind | Prisma.EnumLookKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLookKindFilter<$PrismaModel> | $Enums.LookKind
+}
+
+export type EnumLookKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LookKind | Prisma.EnumLookKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLookKindWithAggregatesFilter<$PrismaModel> | $Enums.LookKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLookKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLookKindFilter<$PrismaModel>
+}
+
 export type EnumStoreStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.StoreStatus | Prisma.EnumStoreStatusFieldRefInput<$PrismaModel>
   in?: $Enums.StoreStatus[] | Prisma.ListEnumStoreStatusFieldRefInput<$PrismaModel>
@@ -520,6 +537,23 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumLookKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.LookKind | Prisma.EnumLookKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLookKindFilter<$PrismaModel> | $Enums.LookKind
+}
+
+export type NestedEnumLookKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LookKind | Prisma.EnumLookKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LookKind[] | Prisma.ListEnumLookKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLookKindWithAggregatesFilter<$PrismaModel> | $Enums.LookKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLookKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLookKindFilter<$PrismaModel>
 }
 
 export type NestedEnumStoreStatusFilter<$PrismaModel = never> = {

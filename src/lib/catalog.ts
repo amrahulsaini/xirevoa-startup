@@ -174,6 +174,67 @@ const SPECS: CategorySpec[] = [
     ],
     taglines: ["Weight you can feel", "Heritage, worn now", "Everyday shine", "A quiet flex", "Stack them up", "Passed down, worn forward"],
   },
+  /* ── Women's ── */
+  {
+    category: "tops",
+    noun: "top",
+    styles: [
+      { key: "crop", name: "Crop Top", fit: "Cropped", desc: "a fitted crop top with short sleeves and a straight cropped hem" },
+      { key: "peplum", name: "Peplum Top", fit: "Fitted", desc: "a peplum top, fitted through the bodice with a flared ruffle at the waist" },
+      { key: "wrap", name: "Wrap Top", fit: "Relaxed", desc: "a wrap top with a v-neckline and a tie at the waist" },
+      { key: "puffsleeve", name: "Puff Sleeve", fit: "Regular", desc: "a blouse with voluminous puff sleeves and a round neckline" },
+      { key: "cami", name: "Camisole", fit: "Slim", desc: "a slim camisole top with thin spaghetti straps and a straight neckline" },
+      { key: "tunic", name: "Tunic", fit: "Relaxed", desc: "a relaxed longline tunic top with three-quarter sleeves" },
+    ],
+    colours: [
+      { key: "white", name: "White", desc: "crisp white cotton" },
+      { key: "black", name: "Black", desc: "solid black" },
+      { key: "blush", name: "Blush", desc: "soft blush pink" },
+      { key: "emerald", name: "Emerald", desc: "deep emerald green" },
+      { key: "floral", name: "Floral", desc: "an all-over small floral print on an ivory ground" },
+    ],
+    taglines: ["Day to night", "Effortless", "Made to move", "The one you reach for", "Quietly striking", "Layer or don't"],
+  },
+  {
+    category: "kurti",
+    noun: "kurti",
+    styles: [
+      { key: "straight", name: "Straight Kurti", fit: "Straight", desc: "a straight-cut knee-length kurti with side slits and a mandarin collar" },
+      { key: "anarkali", name: "Anarkali", fit: "Flared", desc: "an Anarkali kurti, fitted at the bodice and flaring into a full floor-length skirt" },
+      { key: "a-line", name: "A-Line Kurti", fit: "A-Line", desc: "an A-line kurti flaring gently from the shoulders to a mid-calf hem" },
+      { key: "angrakha", name: "Angrakha", fit: "Wrap", desc: "an Angrakha-style kurti with an overlapping wrap front tied at the side" },
+      { key: "short", name: "Short Kurti", fit: "Short", desc: "a short hip-length kurti with three-quarter sleeves" },
+      { key: "jacket", name: "Jacket Kurti", fit: "Layered", desc: "a layered kurti with an attached long open jacket over a straight inner kurta" },
+    ],
+    colours: [
+      { key: "indigo-block", name: "Indigo Block Print", desc: "indigo blue cotton with a traditional hand-block print" },
+      { key: "mustard", name: "Mustard", desc: "warm mustard yellow with fine gold thread embroidery at the neckline" },
+      { key: "ivory-chikan", name: "Ivory Chikankari", desc: "ivory cotton with delicate white Chikankari embroidery" },
+      { key: "maroon", name: "Maroon", desc: "deep maroon with subtle zari border detailing" },
+      { key: "teal-bandhani", name: "Teal Bandhani", desc: "teal with an all-over Bandhani tie-dye pattern" },
+    ],
+    taglines: ["Festival-ready", "Heritage, worn now", "Cool in the heat", "Grace, effortlessly", "Made for the occasion", "Everyday elegance"],
+  },
+  {
+    category: "formal",
+    noun: "formal outfit",
+    styles: [
+      { key: "blazer", name: "Blazer", fit: "Tailored", desc: "a single-breasted tailored blazer with notch lapels" },
+      { key: "pantsuit", name: "Pantsuit", fit: "Tailored", desc: "a matching two-piece trouser suit with a tailored jacket and straight-leg trousers" },
+      { key: "sheath", name: "Sheath Dress", fit: "Fitted", desc: "a knee-length fitted sheath dress with a boat neckline and short sleeves" },
+      { key: "pencil-skirt", name: "Pencil Skirt", fit: "Fitted", desc: "a high-waisted knee-length pencil skirt with a back vent" },
+      { key: "shirt-dress", name: "Shirt Dress", fit: "Relaxed", desc: "a belted midi shirt dress with a collar and button-through front" },
+      { key: "wide-trouser", name: "Wide Trousers", fit: "Wide-Leg", desc: "high-waisted wide-leg formal trousers with a sharp front crease" },
+    ],
+    colours: [
+      { key: "charcoal", name: "Charcoal", desc: "charcoal grey wool" },
+      { key: "navy", name: "Navy", desc: "deep navy blue" },
+      { key: "black", name: "Black", desc: "sharp solid black" },
+      { key: "beige", name: "Beige", desc: "warm beige" },
+      { key: "pinstripe", name: "Pinstripe", desc: "dark grey with fine white pinstripes" },
+    ],
+    taglines: ["Boardroom-ready", "Quiet authority", "Sharp, not stiff", "Desk to dinner", "The power piece", "Tailored to win"],
+  },
   {
     category: "shoes",
     noun: "pair of shoes",
@@ -208,6 +269,9 @@ const STAGING: Record<Category, string> = {
   glasses: "floating centred on a pure white background, three-quarter front view",
   jewellery: "arranged centred on a pure white background, softly lit",
   shoes: "a matching pair arranged side by side on a pure white background, three-quarter side view",
+  tops: "laid flat on a pure white seamless surface, front view, neckline and sleeves visible",
+  kurti: "laid flat on a pure white seamless surface, front view, full length, any print or embroidery clearly visible",
+  formal: "laid flat on a pure white seamless surface, front view, tailoring clearly visible",
 };
 
 function build(): CatalogItem[] {
@@ -241,6 +305,9 @@ export const CATALOG: CatalogItem[] = build();
 
 export const CATEGORIES: { id: Category | "all"; label: string }[] = [
   { id: "all", label: "Everything" },
+  { id: "tops", label: "Tops" },
+  { id: "kurti", label: "Kurtis" },
+  { id: "formal", label: "Formals" },
   { id: "jeans", label: "Denim" },
   { id: "tshirt", label: "Tees" },
   { id: "shirt", label: "Shirts" },
