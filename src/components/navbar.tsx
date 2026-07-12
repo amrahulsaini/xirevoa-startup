@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme";
 import { cn } from "@/lib/cn";
@@ -138,9 +138,8 @@ export function Navbar({
 
             <Link
               href="/studio"
-              className="group hidden items-center gap-2 rounded-full bg-bone-100 px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform duration-300 hover:scale-[1.03] active:scale-95 sm:flex"
+              className="hidden rounded-full bg-bone-100 px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform duration-300 hover:scale-[1.03] active:scale-95 sm:flex"
             >
-              <Sparkles className="size-4 transition-transform duration-500 group-hover:rotate-90" />
               Try it on
             </Link>
 
@@ -191,9 +190,8 @@ export function Navbar({
               <Link
                 href="/studio"
                 onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-full bg-bone-100 px-6 py-4 font-medium text-ink-950"
+                className="flex items-center justify-center rounded-full bg-bone-100 px-6 py-4 font-medium text-ink-950"
               >
-                <Sparkles className="size-4" />
                 Try it on
               </Link>
             </motion.div>

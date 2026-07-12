@@ -19,6 +19,14 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
 
+  /// Chosen at sign-up, shown around the app. Unique, case-insensitive by
+  /// convention (we lowercase before storing).
+  username String? @unique
+
+  /// bcrypt hash. Null for accounts created purely through Google — those users
+  /// never set a password and sign in through the OAuth provider instead.
+  passwordHash String?
+
   /// The shopper's saved try-on photo, so they don't re-upload every visit.
   /// Storage key, not a URL — the driver decides how to serve it.
   photoKey String?
@@ -71,6 +79,7 @@ enum Category {
   jeans
   jacket
   dress
+  shoes
   glasses
   jewellery
 }

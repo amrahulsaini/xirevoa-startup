@@ -15,6 +15,7 @@ export const Category = {
   jeans: 'jeans',
   jacket: 'jacket',
   dress: 'dress',
+  shoes: 'shoes',
   glasses: 'glasses',
   jewellery: 'jewellery'
 } as const

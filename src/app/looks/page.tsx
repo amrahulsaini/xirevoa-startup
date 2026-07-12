@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { Sparkles } from "lucide-react";
+import { Shirt } from "lucide-react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { Reveal } from "@/components/reveal";
@@ -37,7 +37,7 @@ export default async function LooksPage() {
       {looks.length === 0 ? (
         <Reveal className="mt-16">
           <div className="hairline flex flex-col items-center rounded-2xl border border-dashed py-24 text-center">
-            <Sparkles className="size-6 text-bone-500" />
+            <Shirt className="size-6 text-bone-500" />
             <p className="mt-5 font-medium text-bone-100">Nothing fitted yet.</p>
             <p className="mt-2 max-w-xs text-sm text-bone-400">
               Head to the Studio, stack a look, and it&apos;ll show up here.

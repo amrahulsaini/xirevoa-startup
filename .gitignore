@@ -59,3 +59,6 @@ next-env.d.ts
 deploy/.dbpass
 deploy/.env.production
 deploy/.startup.generated.sh
+
+# Temporary brand picker — delete once the logo/spinner are chosen
+/public/brand.html

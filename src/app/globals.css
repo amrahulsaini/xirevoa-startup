@@ -212,6 +212,17 @@
   }
 }
 
+/* Spinner bars breathing like folds of cloth */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-6px) scaleY(1.35);
+  }
+}
+
 /* Film grain keeps large flat dark areas from looking like dead pixels */
 @keyframes grain {
   0%,
