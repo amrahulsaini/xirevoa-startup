@@ -19,7 +19,10 @@ interface Driver {
 
 /* ─────────────────────────────── Local disk ────────────────────────────── */
 
-const LOCAL_ROOT = path.join(process.cwd(), "storage");
+// In production this points outside the app directory (/srv/xirevoa-storage), so
+// a redeploy — which replaces /srv/xirevoa wholesale — can't wipe users' looks.
+const LOCAL_ROOT =
+  process.env.STORAGE_DIR ?? path.join(process.cwd(), "storage");
 
 const localDriver: Driver = {
   async put(key, body) {
