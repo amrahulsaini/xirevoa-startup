@@ -66,3 +66,8 @@ deploy/.startup.generated.sh
 # stray dev scratch
 /q.sh
 /*.mjs
+
+# deploy tarballs — never commit
+*.tgz
+deploy/.remote-build.lf.sh
+deploy/.setup-dbui.lf.sh
