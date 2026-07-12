@@ -8,13 +8,16 @@ import { verifyPassword } from "@/lib/password";
 /**
  * Auth.js.
  *
- * Email + password is the primary way in (sign up sets a username and password);
- * Google is offered when its credentials are configured.
+ * ONE method per email, by design. Each address is bound to whichever method
+ * created it: an email/password account can't sign in with Google, and a Google
+ * account can't use email/password. There is deliberately NO account linking —
+ * `allowDangerousEmailAccountLinking` is off, and the signIn callback rejects a
+ * Google login whose email already owns a password account.
  *
  * Session strategy is JWT, not database: the Credentials provider cannot use the
  * database strategy — the adapter only creates a DB session for OAuth/email
  * sign-ins, so a credentials login would succeed and then have no session. JWT
- * covers all three providers uniformly.
+ * covers all providers uniformly.
  */
 
 export const isGoogleConfigured = Boolean(
@@ -26,13 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   pages: { signIn: "/signin" },
   providers: [
-    ...(isGoogleConfigured
-      ? [
-          Google({
-            allowDangerousEmailAccountLinking: true,
-          }),
-        ]
-      : []),
+    ...(isGoogleConfigured ? [Google] : []),
     Credentials({
       credentials: {
         email: {},
@@ -60,6 +57,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      // Enforce one-method-per-email at the Google door: if this address already
+      // owns a password account, refuse the Google login and tell them to use
+      // their password. Returning a string redirects there.
+      if (account?.provider === "google" && user.email) {
+        const existing = await prisma.user.findUnique({
+          where: { email: user.email.toLowerCase() },
+          select: { passwordHash: true },
+        });
+        if (existing?.passwordHash) return "/signin?error=use-password";
+      }
+      return true;
+    },
     jwt({ token, user }) {
       // `user` is only present on sign-in; persist the id onto the token.
       if (user) token.sub = user.id;

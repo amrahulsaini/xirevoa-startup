@@ -12,14 +12,21 @@ export const metadata: Metadata = {
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; error?: string }>;
 }) {
   const session = await auth();
-  const { next } = await searchParams;
+  const { next, error } = await searchParams;
   const safeNext =
     next?.startsWith("/") && !next.startsWith("//") ? next : "/studio";
 
   if (session?.user) redirect(safeNext);
+
+  // Set by the auth signIn callback when a Google login is refused because the
+  // email owns a password account.
+  const notice =
+    error === "use-password"
+      ? "This email uses email & password. Sign in with your password below."
+      : undefined;
 
   async function withGoogle() {
     "use server";
@@ -36,6 +43,7 @@ export default async function SignInPage({
         googleAction={withGoogle}
         showGoogle={isGoogleConfigured}
         next={safeNext}
+        notice={notice}
       />
     </AuthShell>
   );

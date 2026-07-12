@@ -40,12 +40,19 @@ export async function requestOtp(_prev: OtpState, formData: FormData): Promise<O
     return { error: "Too many codes requested. Try again in a few minutes." };
   }
 
+  // One method per email: if this address is registered by ANY method, it can't
+  // sign up again — send them to sign in with the method it already uses.
   const existing = await prisma.user.findUnique({
     where: { email },
-    select: { passwordHash: true },
+    select: { passwordHash: true, accounts: { select: { provider: true } } },
   });
-  if (existing?.passwordHash) {
-    return { error: "An account with this email already exists. Sign in instead." };
+  if (existing) {
+    const isGoogle = existing.accounts.some((a) => a.provider === "google");
+    return {
+      error: isGoogle
+        ? "This email is registered with Google. Use “Continue with Google” to sign in."
+        : "This email already has an account. Sign in instead.",
+    };
   }
 
   try {
@@ -70,6 +77,19 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
   const next = safe(String(formData.get("next") ?? ""));
+
+  // A Google-first account has no password. Point them at Google (or at adding a
+  // password) instead of the useless "email and password don't match".
+  const acct = await prisma.user.findUnique({
+    where: { email },
+    select: { passwordHash: true },
+  });
+  if (acct && !acct.passwordHash) {
+    return {
+      error: "This email uses Google sign-in. Continue with Google, or create a password on the sign-up page.",
+      field: "password",
+    };
+  }
 
   try {
     await signIn("credentials", { email, password, redirect: false });
@@ -96,26 +116,26 @@ export async function register(_prev: AuthState, formData: FormData): Promise<Au
   }
 
   // The email was proven at the OTP step; consume the code here so account
-  // creation and email verification are one atomic decision.
+  // creation/update and email verification are one atomic decision.
   if (!(await consumeOtp(email, code))) {
     return { error: "Your email verification expired. Start again.", field: "email" };
   }
 
-  // Race-safe enough for our scale: the unique constraints on email/username are
-  // the real guard; these checks just produce friendlier messages.
-  const [emailTaken, usernameTaken] = await Promise.all([
-    prisma.user.findUnique({ where: { email }, select: { id: true } }),
-    prisma.user.findUnique({
-      where: { username: username.toLowerCase() },
-      select: { id: true },
-    }),
-  ]);
-  if (emailTaken) {
-    return { error: "An account with this email already exists.", field: "email" };
+  // One method per email. requestOtp already blocks known emails; re-check here
+  // to close the race between requesting the code and submitting the form.
+  const existing = await prisma.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+  if (existing) {
+    return { error: "This email already has an account. Sign in instead.", field: "email" };
   }
-  if (usernameTaken) {
-    return { error: "That username is taken.", field: "username" };
-  }
+
+  const usernameTaken = await prisma.user.findUnique({
+    where: { username: username.toLowerCase() },
+    select: { id: true },
+  });
+  if (usernameTaken) return { error: "That username is taken.", field: "username" };
 
   try {
     await prisma.user.create({
