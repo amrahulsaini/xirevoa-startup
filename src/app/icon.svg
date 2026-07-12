@@ -1,7 +1,6 @@
 <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Standalone favicon: the same ribbon-X as <LogoMark>, with the Flare colours
-       hardcoded. A favicon is fetched outside the page, so it cannot resolve the
-       CSS custom properties the component version uses.
+  <!-- Favicon: the same reflected X as <LogoMark>, Flare colours hardcoded
+       (a favicon is fetched outside the page and can't read CSS variables).
        Transparent background so it reads on light and dark browser chrome. -->
   <defs>
     <linearGradient id="f" x1="3" y1="3" x2="29" y2="29" gradientUnits="userSpaceOnUse">
@@ -9,14 +8,7 @@
       <stop offset="0.5" stop-color="#E8367A"/>
       <stop offset="1" stop-color="#7C3AED"/>
     </linearGradient>
-    <clipPath id="c">
-      <path d="M3 3h7.6L29 29h-7.6L3 3Z"/>
-      <path d="M29 3h-7.6L3 29h7.6L29 3Z"/>
-    </clipPath>
   </defs>
-  <g clip-path="url(#c)">
-    <rect width="32" height="32" fill="url(#f)"/>
-    <path d="M16 0h16v32H16z" fill="#000" opacity="0.13"/>
-    <path d="M0 16h32v16H0z" fill="#000" opacity="0.07"/>
-  </g>
+  <path d="M4 3h6.6L28 29h-6.6L4 3Z" fill="url(#f)"/>
+  <path d="M28 3h-6.6L4 29h6.6L28 3Z" fill="url(#f)" opacity="0.34"/>
 </svg>

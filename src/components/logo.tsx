@@ -1,15 +1,12 @@
 import { cn } from "@/lib/cn";
 
 /**
- * The Xirevoa mark: a ribbon monogram X.
+ * The Xirevoa mark: a reflected X.
  *
- * Two thick crossing bars with mitred ends. The "folded ribbon" quality comes
- * from shading facets, NOT from cutting voids out of the arms — an earlier
- * version carved chevrons out and the mark read as shattered rather than
- * folded. Solid geometry, shaded.
- *
- * Built as real vector geometry (not a traced bitmap) so it stays crisp at any
- * size and picks up the theme's gradient tokens.
+ * The left arm is solid; the right is its faded reflection — you, and you in
+ * the mirror, which is exactly what a virtual try-on is. Carries the Flare
+ * gradient. Real vector geometry so it stays crisp at any size and picks up the
+ * theme's gradient tokens.
  *
  * `gradientId` must be unique per instance. Two SVGs on one page sharing a
  * <linearGradient> id means the second silently inherits the first's fill.
@@ -21,8 +18,6 @@ export function LogoMark({
   className?: string;
   gradientId?: string;
 }) {
-  const clipId = `${gradientId}-clip`;
-
   return (
     <svg
       viewBox="0 0 32 32"
@@ -45,21 +40,12 @@ export function LogoMark({
           <stop offset="0.5" stopColor="var(--color-flare-rose)" />
           <stop offset="1" stopColor="var(--color-flare-violet)" />
         </linearGradient>
-
-        {/* Confines the fold shading to the X itself, so the facets can be drawn
-            as simple rectangles without spilling outside the mark. */}
-        <clipPath id={clipId}>
-          <path d="M3 3h7.6L29 29h-7.6L3 3Z" />
-          <path d="M29 3h-7.6L3 29h7.6L29 3Z" />
-        </clipPath>
       </defs>
 
-      <g clipPath={`url(#${clipId})`}>
-        <rect width="32" height="32" fill={`url(#${gradientId})`} />
-        {/* The fold: the right half of each ribbon sits fractionally in shadow. */}
-        <path d="M16 0h16v32H16z" fill="#000" opacity="0.13" />
-        <path d="M0 16h32v16H0z" fill="#000" opacity="0.07" />
-      </g>
+      {/* Solid arm */}
+      <path d="M4 3h6.6L28 29h-6.6L4 3Z" fill={`url(#${gradientId})`} />
+      {/* Its reflection */}
+      <path d="M28 3h-6.6L4 29h6.6L28 3Z" fill={`url(#${gradientId})`} opacity="0.34" />
     </svg>
   );
 }

@@ -9,10 +9,10 @@ import {
   Download,
   Layers,
   RotateCcw,
-  Sparkles,
   Upload,
   X,
 } from "lucide-react";
+import { Spinner } from "./spinner";
 import { CATALOG, CATEGORIES, bySlug, type CatalogItem } from "@/lib/catalog";
 import { downscaleToDataUrl } from "@/lib/downscale";
 import { cn } from "@/lib/cn";
@@ -174,14 +174,11 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
             >
               {stage === "fitting" ? (
                 <>
-                  <Sparkles className="size-4 animate-pulse" />
+                  <Spinner className="text-[10px]" />
                   Fitting…
                 </>
               ) : (
-                <>
-                  <Sparkles className="size-4 transition-transform duration-500 group-hover:rotate-90" />
-                  {result ? "Fit again" : "Fit the look"}
-                </>
+                <>{result ? "Fit again" : "Fit the look"}</>
               )}
             </button>
 
@@ -403,7 +400,7 @@ function FittingOverlay() {
       />
 
       <div className="relative z-10 pb-10 text-center">
-        <Sparkles className="mx-auto size-6 animate-pulse text-flare-amber" />
+        <Spinner className="justify-center text-base" />
         <AnimatePresence mode="wait">
           <motion.p
             key={i}

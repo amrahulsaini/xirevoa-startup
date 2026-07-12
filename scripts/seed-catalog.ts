@@ -15,7 +15,8 @@ import { generateGarment } from "../src/lib/gemini";
 const OUT = path.join(process.cwd(), "public", "catalog");
 const force = process.argv.includes("--force");
 
-// Bounded concurrency — the API rate-limits, and a 14-wide burst gets throttled.
+// Bounded concurrency — the API rate-limits, and too wide a burst gets throttled.
+// generateImage() retries 429s with backoff, so this just paces the fleet.
 const LIMIT = 3;
 
 async function main() {

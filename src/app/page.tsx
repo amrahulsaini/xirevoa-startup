@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Camera, Layers, Sparkles, Store } from "lucide-react";
+import { ArrowRight, Camera, Eye, Layers, Store } from "lucide-react";
 import { Aurora } from "@/components/aurora";
 import { BeforeAfter } from "@/components/before-after";
 import { Reveal, RevealLine, RevealWords } from "@/components/reveal";
@@ -30,14 +30,7 @@ function Hero() {
           and the showcase image is happiest at its natural 3:4. */}
       <div className="mx-auto grid w-full max-w-6xl items-center gap-16 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
-          <Reveal delay={0.1}>
-            <span className="hairline glass inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs tracking-wide text-bone-300 uppercase">
-              <Sparkles className="size-3.5 text-flare-amber" />
-              Now in open beta
-            </span>
-          </Reveal>
-
-          <h1 className="mt-8 font-display text-5xl leading-[1.05] tracking-tight text-nowrap text-bone-50 sm:text-6xl lg:text-7xl">
+          <h1 className="font-display text-5xl leading-[1.05] tracking-tight text-nowrap text-bone-50 sm:text-6xl lg:text-7xl">
             <RevealWords text="Try it on." delay={0.2} />
             <br />
             <RevealLine
@@ -82,7 +75,7 @@ function Hero() {
 
         {/* The proof. Drag it. */}
         <Reveal delay={0.4} y={40}>
-          <div className="flare-border relative mx-auto w-full max-w-md rounded-2xl">
+          <div className="relative mx-auto w-full max-w-md">
             <BeforeAfter before="/showcase/before.png" after="/showcase/after.png" />
           </div>
           <p className="mt-5 text-center text-sm text-bone-400">
@@ -149,7 +142,7 @@ const STEPS = [
     body: "Pick a tee, add jeans, throw on aviators and a chain. Xirevoa fits them all in one pass — so your face never drifts.",
   },
   {
-    icon: Sparkles,
+    icon: Eye,
     step: "03",
     title: "See yourself",
     body: "Not a model who looks nothing like you. You — your build, your skin tone, your face, wearing the actual garment.",
@@ -229,8 +222,8 @@ function CollectionRail() {
                   {/* Reveals on hover — the whole promise in one line */}
                   <div className="absolute inset-0 flex items-end bg-linear-to-t from-ink-950/80 to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                     <span className="flex items-center gap-2 text-sm font-medium text-bone-50">
-                      <Sparkles className="size-4" />
                       Try this on
+                      <ArrowRight className="size-4" />
                     </span>
                   </div>
                 </div>
