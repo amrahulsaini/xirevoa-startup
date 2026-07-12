@@ -62,3 +62,7 @@ deploy/.startup.generated.sh
 
 # Temporary brand picker — delete once the logo/spinner are chosen
 /public/brand.html
+
+# stray dev scratch
+/q.sh
+/*.mjs
