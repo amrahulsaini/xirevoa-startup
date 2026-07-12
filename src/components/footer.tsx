@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wordmark } from "./wordmark";
+import { Logo } from "./logo";
 
 const COLUMNS = [
   {
@@ -38,7 +38,7 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-[1.5fr_repeat(3,1fr)]">
           <div>
             <Link href="/" className="text-lg">
-              <Wordmark />
+              <Logo gradientId="flare-footer" />
             </Link>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-bone-400">
               A fitting room that fits in your pocket. Built in India, for the

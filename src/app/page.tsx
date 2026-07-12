@@ -218,7 +218,7 @@ function CollectionRail() {
                 href={`/studio?add=${item.slug}`}
                 className="group block overflow-hidden rounded-xl"
               >
-                <div className="relative aspect-square overflow-hidden rounded-xl bg-bone-50">
+                <div className="relative aspect-square overflow-hidden rounded-xl bg-product">
                   <Image
                     src={item.image}
                     alt={item.name}

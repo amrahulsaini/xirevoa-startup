@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// Prisma 7 takes the connection URL from prisma.config.ts (for migrations) and
+// from the driver adapter passed to PrismaClient (at runtime), not from here.
+datasource db {
+  provider = "postgresql"
+}
+
+/// ─────────────────────────── Auth (Auth.js) ───────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+
+  /// The shopper's saved try-on photo, so they don't re-upload every visit.
+  /// Storage key, not a URL — the driver decides how to serve it.
+  photoKey String?
+
+  accounts Account[]
+  sessions Session[]
+  looks    Look[]
+  store    Store?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @id
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+/// ────────────────────────────── Catalog ───────────────────────────────
+
+enum Category {
+  tshirt
+  shirt
+  jeans
+  jacket
+  dress
+  glasses
+  jewellery
+}
+
+/// A garment a shopper can try on.
+///
+/// `storeId` is null for Xirevoa's own founding collection. Once local stores
+/// onboard, their inventory lands in this same table with storeId set — the
+/// try-on engine doesn't care who owns the garment.
+model Garment {
+  id       String   @id @default(cuid())
+  slug     String   @unique
+  name     String
+  category Category
+  /// Fit variant shoppers filter on: Baggy, Straight, Bootcut, Slim…
+  fit      String?
+  tagline  String?
+
+  /// Storage key of the flat-lay product shot fed to the try-on engine.
+  imageKey String
+
+  /// Deliberately nullable. We show no prices while onboarding stores —
+  /// shoppers are here to see themselves in the garment, not to buy yet.
+  priceInPaise Int?
+
+  storeId String?
+  store   Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  looks LookGarment[]
+
+  @@index([category, published])
+  @@index([storeId])
+}
+
+/// ──────────────────────────────── Looks ───────────────────────────────
+
+/// One completed try-on: a person + the garments they wore + the result.
+model Look {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Storage key of the generated image.
+  imageKey String
+
+  /// Hash of (photo + garments). Lets us serve a repeat request from storage
+  /// instead of paying Gemini for an image we already have.
+  cacheKey String @unique
+
+  /// Off by default. A look is a photo of the user's face — it only becomes
+  /// publicly reachable if they explicitly share it.
+  shared    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  garments LookGarment[]
+
+  @@index([userId, createdAt])
+}
+
+model LookGarment {
+  lookId    String
+  garmentId String
+  look      Look    @relation(fields: [lookId], references: [id], onDelete: Cascade)
+  garment   Garment @relation(fields: [garmentId], references: [id], onDelete: Cascade)
+
+  @@id([lookId, garmentId])
+}
+
+/// ──────────────────────────────── Stores ──────────────────────────────
+
+enum StoreStatus {
+  pending
+  approved
+  rejected
+}
+
+/// A local clothing store listing its stock on Xirevoa.
+model Store {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name  String
+  slug  String @unique
+  city  String
+  state String
+  phone String?
+
+  /// Stores are manually reviewed before their stock goes live — one bad
+  /// listing on a try-on site is a trust problem, not just a content problem.
+  status    StoreStatus @default(pending)
+  createdAt DateTime    @default(now())
+
+  garments Garment[]
+
+  @@index([status])
+}
