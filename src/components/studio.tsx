@@ -13,11 +13,15 @@ import {
   X,
 } from "lucide-react";
 import { Spinner } from "./spinner";
+import { ensurePermission, pushNote } from "@/lib/notifications";
 import { CATALOG, CATEGORIES, bySlug, type CatalogItem } from "@/lib/catalog";
 import { downscaleToDataUrl } from "@/lib/downscale";
 import { cn } from "@/lib/cn";
 
 const MAX_LAYERS = 4;
+
+/** How many garments the rail shows before "Show more". */
+const PAGE_SIZE = 12;
 
 /** Stages the user actually perceives. Drives both the UI and the copy. */
 type Stage = "idle" | "fitting" | "done" | "error";
@@ -44,10 +48,21 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
   const [error, setError] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
+  const [limit, setLimit] = useState(PAGE_SIZE);
+
   const visible =
     category === "all"
       ? CATALOG
       : CATALOG.filter((item) => item.category === category);
+
+  const shown = visible.slice(0, limit);
+
+  // Switching category should start the new section from the top, not carry over
+  // however far the previous one had been paged.
+  const pickCategory = (id: string) => {
+    setCategory(id);
+    setLimit(PAGE_SIZE);
+  };
 
   const toggle = (item: CatalogItem) => {
     setLook((prev) => {
@@ -80,7 +95,15 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
     setError(null);
     setResultPainted(false);
 
+    // Ask on the click — browsers only grant permission from a user gesture, and
+    // this is the moment it's obviously relevant.
+    void ensurePermission();
+
+    const names = look.map((s) => bySlug(s)?.name).filter(Boolean).join(", ");
+
     try {
+      // This request keeps running while the tab is in the background, which is
+      // why a notification on completion is worth anything.
       const res = await fetch("/api/tryon", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -91,10 +114,20 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
       if (!res.ok) {
         setError(data.error ?? "Something went wrong.");
         setStage("error");
+        pushNote({
+          title: "Try-on failed",
+          body: data.error ?? "Something went wrong. Please try again.",
+          href: "/studio",
+        });
         return;
       }
       setResult(data.url);
       setStage("done");
+      pushNote({
+        title: "Your look is ready",
+        body: names ? `You're wearing ${names}.` : "Your try-on is ready to view.",
+        href: "/studio",
+      });
     } catch {
       setError("Couldn't reach the fitting room. Check your connection.");
       setStage("error");
@@ -214,7 +247,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
             {CATEGORIES.map((c) => (
               <button
                 key={c.id}
-                onClick={() => setCategory(c.id)}
+                onClick={() => pickCategory(c.id)}
                 className={cn(
                   "rounded-full px-4 py-2 text-sm transition-colors duration-300",
                   category === c.id
@@ -229,7 +262,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
 
           <motion.div layout className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             <AnimatePresence mode="popLayout">
-              {visible.map((item) => (
+              {shown.map((item) => (
                 <GarmentCard
                   key={item.slug}
                   item={item}
@@ -239,6 +272,21 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
               ))}
             </AnimatePresence>
           </motion.div>
+
+          {/* 245 pieces is far too many to dump at once — page them in. */}
+          {shown.length < visible.length && (
+            <div className="mt-10 flex flex-col items-center gap-3">
+              <button
+                onClick={() => setLimit((n) => n + PAGE_SIZE)}
+                className="hairline rounded-full border px-7 py-3 text-sm font-medium text-bone-200 transition-colors duration-300 hover:bg-bone-100/6 hover:text-bone-50"
+              >
+                Show more
+              </button>
+              <p className="text-xs text-bone-500">
+                Showing {shown.length} of {visible.length}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -390,9 +438,11 @@ function FittingOverlay() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 flex items-end justify-center overflow-hidden bg-ink-950/60 backdrop-blur-[2px]"
+      // Centred, not bottom-aligned — the status is the whole point while
+      // waiting, so it belongs in the middle of the frame.
+      className="absolute inset-0 flex items-center justify-center overflow-hidden bg-ink-950/70 backdrop-blur-[3px]"
     >
-      {/* Scanning sweep */}
+      {/* Scanning sweep down the body */}
       <motion.div
         className="absolute inset-x-0 h-40"
         style={{
@@ -403,8 +453,26 @@ function FittingOverlay() {
         transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative z-10 pb-10 text-center">
-        <Spinner className="mx-auto text-3xl" />
+      {/* Status card */}
+      <motion.div
+        initial={{ scale: 0.94, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="glass hairline relative z-10 mx-6 overflow-hidden rounded-2xl border px-8 py-7 text-center shadow-2xl shadow-black/40"
+      >
+        {/* A light sheen travelling across the card */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 w-1/2"
+          style={{
+            background:
+              "linear-gradient(100deg, transparent, color-mix(in oklab, var(--color-bone-100) 10%, transparent), transparent)",
+            animation: "sheen 2.6s ease-in-out infinite",
+          }}
+        />
+
+        <Spinner className="text-2xl" />
+
         <AnimatePresence mode="wait">
           <motion.p
             key={i}
@@ -412,12 +480,31 @@ function FittingOverlay() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.4 }}
-            className="mt-4 text-sm text-bone-200"
+            className="mt-4 text-sm font-medium text-bone-100"
           >
             {FITTING_COPY[i]}
           </motion.p>
         </AnimatePresence>
-      </div>
+
+        <p className="mt-2 text-xs leading-relaxed text-bone-400">
+          This takes 20–40 seconds.
+          <br />
+          Keep browsing — we&apos;ll notify you.
+        </p>
+
+        {/* Progress ticks */}
+        <div className="mt-5 flex justify-center gap-1.5">
+          {FITTING_COPY.map((_, n) => (
+            <span
+              key={n}
+              className={cn(
+                "h-1 rounded-full transition-all duration-500",
+                n <= i ? "w-6 bg-flare-rose" : "w-1.5 bg-bone-100/20",
+              )}
+            />
+          ))}
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

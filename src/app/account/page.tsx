@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { AtSign, Calendar, KeyRound, Mail, Shirt } from "lucide-react";
 import { requireUser } from "@/lib/session";
 import { prisma } from "@/lib/db";

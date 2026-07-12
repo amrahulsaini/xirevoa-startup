@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/
 import { Menu, X } from "lucide-react";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme";
+import { NotificationBell } from "./notification-bell";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
@@ -71,12 +72,16 @@ export function Navbar({
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="fixed inset-x-0 top-0 z-40 flex justify-center px-4 pt-4"
       >
+        {/* Always glass. It used to be transparent until you scrolled, which let
+            page content run underneath the links and made them unreadable. It
+            still *condenses* on scroll — that's the motion — but it is never
+            see-through. */}
         <nav
           className={cn(
-            "flex w-full max-w-6xl items-center justify-between rounded-full border transition-all duration-500",
+            "glass-strong hairline flex w-full max-w-6xl items-center justify-between rounded-full border transition-all duration-500",
             condensed
-              ? "glass hairline border px-4 py-2.5 shadow-2xl shadow-black/40"
-              : "border-transparent px-2 py-3",
+              ? "px-3 py-2 shadow-2xl shadow-black/40 sm:px-4 sm:py-2.5"
+              : "px-3 py-2.5 shadow-xl shadow-black/20 sm:px-4 sm:py-3",
           )}
         >
           <Link href="/" className="shrink-0 px-3 text-base" aria-label="Xirevoa home">
@@ -122,7 +127,8 @@ export function Navbar({
             })}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <NotificationBell />
             <ThemeToggle />
 
             {user ? (
