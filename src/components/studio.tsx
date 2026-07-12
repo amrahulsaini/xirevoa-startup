@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   AlertCircle,
@@ -14,6 +20,15 @@ import {
 } from "lucide-react";
 import { Spinner } from "./spinner";
 import { ensurePermission, pushNote } from "@/lib/notifications";
+import {
+  addRecent,
+  makeThumb,
+  recentServerSnapshot,
+  recentSnapshot,
+  removeRecent,
+  subscribeRecent,
+  type RecentPhoto,
+} from "@/lib/recent-photos";
 import { CATALOG, CATEGORIES, bySlug, type CatalogItem } from "@/lib/catalog";
 import { downscaleToDataUrl } from "@/lib/downscale";
 import { cn } from "@/lib/cn";
@@ -50,6 +65,14 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
 
   const [limit, setLimit] = useState(PAGE_SIZE);
 
+  // Recent uploads live in localStorage — an external store, so it's read with
+  // useSyncExternalStore rather than mirrored into state via an effect.
+  const recent = useSyncExternalStore(
+    subscribeRecent,
+    recentSnapshot,
+    recentServerSnapshot,
+  );
+
   const visible =
     category === "all"
       ? CATALOG
@@ -81,12 +104,24 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
   const pickPhoto = useCallback(async (file: File) => {
     setError(null);
     try {
-      setPerson(await downscaleToDataUrl(file));
+      const full = await downscaleToDataUrl(file);
+      setPerson(full);
       setResult(null);
       setStage("idle");
+      // Remember it so they don't have to re-upload next time.
+      addRecent(full, await makeThumb(full));
     } catch {
       setError("We couldn't read that image. Try a JPEG or PNG.");
     }
+  }, []);
+
+  /** Re-use a previously uploaded photo. */
+  const usePhoto = useCallback((full: string) => {
+    setPerson(full);
+    setResult(null);
+    setResultPainted(false);
+    setStage("idle");
+    setError(null);
   }, []);
 
   const fit = async () => {
@@ -180,6 +215,14 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
               if (file) pickPhoto(file);
               e.target.value = ""; // let the same file be re-picked
             }}
+          />
+
+          <RecentStrip
+            recent={recent}
+            current={person}
+            onUse={usePhoto}
+            onUpload={() => fileInput.current?.click()}
+            onRemove={removeRecent}
           />
 
           <LookStack look={look} onRemove={(slug) => setLook((l) => l.filter((s) => s !== slug))} />
@@ -384,16 +427,7 @@ function PhotoPane({
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
-          <Image
-            src={result}
-            alt="You, wearing the look"
-            fill
-            unoptimized
-            sizes="440px"
-            priority
-            onLoad={onPainted}
-            className="object-cover"
-          />
+          <ResultImage src={result} onPainted={onPainted} />
         </motion.div>
       )}
 
@@ -407,6 +441,122 @@ function PhotoPane({
         {result ? <RotateCcw className="size-4" /> : <X className="size-4" />}
       </button>
     </div>
+  );
+}
+
+/* ─────────────────────── Recently used photos ──────────────────────── */
+
+/**
+ * Strip of previously uploaded photos, so a returning shopper can re-use a shot
+ * in one tap instead of digging through their camera roll again. Always offers
+ * "Upload new" alongside.
+ */
+function RecentStrip({
+  recent,
+  current,
+  onUse,
+  onUpload,
+  onRemove,
+}: {
+  recent: RecentPhoto[];
+  current: string | null;
+  onUse: (full: string) => void;
+  onUpload: () => void;
+  onRemove: (id: string) => void;
+}) {
+  if (recent.length === 0) return null;
+
+  return (
+    <div className="mt-5">
+      <p className="text-xs tracking-[0.2em] text-bone-400 uppercase">
+        Your photos
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2.5">
+        {recent.map((p) => {
+          const active = current === p.full;
+          return (
+            <div key={p.id} className="group relative">
+              <button
+                onClick={() => onUse(p.full)}
+                aria-label="Use this photo"
+                aria-pressed={active}
+                className={cn(
+                  "size-16 overflow-hidden rounded-xl ring-2 transition-all duration-300",
+                  active
+                    ? "ring-flare-rose"
+                    : "ring-transparent hover:ring-bone-100/25",
+                )}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- local data: URL */}
+                <img src={p.thumb} alt="" className="size-full object-cover" />
+              </button>
+              <button
+                onClick={() => onRemove(p.id)}
+                aria-label="Forget this photo"
+                className="glass absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full text-bone-200 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+              >
+                <X className="size-3" />
+              </button>
+            </div>
+          );
+        })}
+
+        <button
+          onClick={onUpload}
+          className="hairline grid size-16 place-items-center rounded-xl border border-dashed text-bone-400 transition-colors hover:bg-bone-100/5 hover:text-bone-100"
+          aria-label="Upload a new photo"
+        >
+          <Upload className="size-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The generated result.
+ *
+ * Deliberately NOT reliant on React's onLoad alone. If the image is already in
+ * the browser cache — which is exactly what happens on a cached try-on — the
+ * load completes before React attaches the handler, onLoad never fires, and the
+ * result stays at opacity 0 forever while the user sits looking at their own
+ * uploaded photo. That was the "sometimes the generated image doesn't show" bug.
+ *
+ * So we ALSO check `complete` on mount, and keep a timeout as a last resort:
+ * showing a possibly-half-painted image beats showing nothing.
+ */
+function ResultImage({
+  src,
+  onPainted,
+}: {
+  src: string;
+  onPainted: () => void;
+}) {
+  const ref = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const img = ref.current;
+    // Already decoded from cache before React got here.
+    if (img?.complete && img.naturalWidth > 0) {
+      onPainted();
+      return;
+    }
+    // Belt and braces: never leave the user staring at their own photo.
+    const t = setTimeout(onPainted, 8000);
+    return () => clearTimeout(t);
+  }, [src, onPainted]);
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- served from /api/media, already optimised
+    <img
+      ref={ref}
+      src={src}
+      alt="You, wearing the look"
+      onLoad={onPainted}
+      // A broken image must still reveal, or the pane is stuck forever.
+      onError={onPainted}
+      className="absolute inset-0 size-full object-cover"
+    />
   );
 }
 
