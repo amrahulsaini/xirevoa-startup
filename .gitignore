@@ -41,9 +41,7 @@ gcp-key*.json
 # Try-on results are photos of real people — never commit them.
 /storage
 
-# NOTE: public/catalog and public/showcase ARE committed on purpose.
-# Generation is non-deterministic, so re-seeding would silently produce a
-# different collection. They're product assets, not build artifacts.
+
 
 # vercel
 .vercel
@@ -71,3 +69,11 @@ deploy/.startup.generated.sh
 *.tgz
 deploy/.remote-build.lf.sh
 deploy/.setup-dbui.lf.sh
+
+# Generated images are made ON THE SERVER (deploy/remote-fast.sh runs the seed
+# scripts), and live in /srv/xirevoa-assets outside the app dir so a deploy can
+# never wipe them. Shipping 130MB from the dev machine on every push was absurd.
+# Regenerating is non-deterministic, which is why they persist on the box rather
+# than being rebuilt from scratch.
+/public/catalog
+/public/haircuts
