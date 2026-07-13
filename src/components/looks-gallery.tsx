@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Download, Maximize2, X } from "lucide-react";
+import { ShareButton } from "./share-button";
 import { cn } from "@/lib/cn";
 
 export interface LookCard {
@@ -98,6 +99,7 @@ export function LooksGallery({
                   >
                     <Maximize2 className="size-4" />
                   </button>
+                  <ShareButton compact lookId={c.id} label={c.title} />
                   <a
                     href={c.url}
                     download={`xirevoa-${c.kind}-${c.id.slice(0, 6)}.png`}
@@ -124,15 +126,22 @@ export function LooksGallery({
                 })}
               </p>
 
-              {/* Always-visible download on touch, where hover doesn't exist. */}
-              <a
-                href={c.url}
-                download={`xirevoa-${c.kind}-${c.id.slice(0, 6)}.png`}
-                className="hairline mt-3 flex items-center justify-center gap-2 rounded-full border py-2 text-xs text-bone-300 transition-colors hover:bg-bone-100/6 hover:text-bone-50 lg:hidden"
-              >
-                <Download className="size-3.5" />
-                Download
-              </a>
+              {/* Always visible on touch, where hover doesn't exist. */}
+              <div className="mt-3 grid grid-cols-2 gap-2 lg:hidden">
+                <a
+                  href={c.url}
+                  download={`xirevoa-${c.kind}-${c.id.slice(0, 6)}.png`}
+                  className="hairline flex items-center justify-center gap-1.5 rounded-full border py-2 text-xs text-bone-300 transition-colors hover:bg-bone-100/6 hover:text-bone-50"
+                >
+                  <Download className="size-3.5" />
+                  Save
+                </a>
+                <ShareButton
+                  lookId={c.id}
+                  label={c.title}
+                  className="py-2 text-xs"
+                />
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>
@@ -161,16 +170,23 @@ export function LooksGallery({
                 alt={zoom.title}
                 className="max-h-[80dvh] rounded-2xl object-contain"
               />
-              <div className="mt-4 flex items-center justify-between gap-4">
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                 <p className="text-sm text-bone-300">{zoom.title}</p>
-                <a
-                  href={zoom.url}
-                  download={`xirevoa-${zoom.kind}-${zoom.id.slice(0, 6)}.png`}
-                  className="flex items-center gap-2 rounded-full bg-bone-100 px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform hover:scale-[1.03]"
-                >
-                  <Download className="size-4" />
-                  Download
-                </a>
+                <div className="flex items-center gap-2">
+                  <ShareButton
+                    lookId={zoom.id}
+                    label={zoom.title}
+                    className="px-5 py-2.5"
+                  />
+                  <a
+                    href={zoom.url}
+                    download={`xirevoa-${zoom.kind}-${zoom.id.slice(0, 6)}.png`}
+                    className="flex items-center gap-2 rounded-full bg-bone-100 px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform hover:scale-[1.03]"
+                  >
+                    <Download className="size-4" />
+                    Download
+                  </a>
+                </div>
               </div>
             </motion.div>
 
