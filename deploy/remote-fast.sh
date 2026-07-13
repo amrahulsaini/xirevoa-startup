@@ -1,35 +1,34 @@
 #!/usr/bin/env bash
 # Fast in-place deploy. Runs ON the box.
 #
-# The old deploy re-did everything from zero every time: re-uploaded 130MB of
-# catalog images, wiped node_modules and ran a full `npm ci`, and built with a
-# cold cache. Three to five minutes for a one-line change.
+# Generated images (catalog + haircuts) are NEVER shipped from the dev machine.
+# They already live in public/catalog and public/haircuts ON THE BOX, and they
+# survive a deploy for a simple reason: `tar -x` only overwrites what's IN the
+# archive — it never deletes files that aren't. The deploy tarball simply omits
+# those two directories, so they're left alone.
 #
-# This one keeps the expensive things and only redoes what actually changed:
+# (Symlinking them out of the app dir was tried and doesn't work: Turbopack
+# traces public/ as a dependency of the try-on route and refuses a symlink that
+# points outside the project root.)
+#
+# Missing images are generated HERE by the seed scripts, which are idempotent —
+# so adding catalog pieces costs nothing at deploy time, the server just makes
+# them.
+#
+# What else we keep rather than redo:
 #   · node_modules  — reinstalled only when package-lock.json changes
 #   · .next/cache   — kept, so Next rebuilds incrementally
-#   · public/       — only replaced when the images actually changed
 #
-# Deploys in place. A failed build leaves the running service untouched (we only
-# restart on success), so the site never goes down behind a broken build.
+# A failed build leaves the running service untouched (we only restart on
+# success), so the site never goes down behind a broken build.
 set -euo pipefail
 
 APP=/srv/xirevoa
 cd "$APP"
 
-# ── code (always) ──
+# ── code + small public files (the image dirs aren't in the archive) ──
 sudo tar -xzf /tmp/code.tgz -C "$APP"
 rm -f /tmp/code.tgz
-
-# ── public assets (only when the caller sent them) ──
-if [ -f /tmp/public.tgz ]; then
-  echo "==> assets changed, replacing public/"
-  sudo rm -rf "$APP/public"
-  sudo tar -xzf /tmp/public.tgz -C "$APP"
-  rm -f /tmp/public.tgz
-else
-  echo "==> assets unchanged, skipping ($(ls "$APP/public/catalog" | wc -l) catalog images kept)"
-fi
 
 sudo chown -R xirevoa:xirevoa "$APP"
 
@@ -45,11 +44,17 @@ else
   echo "==> dependencies unchanged, skipping npm ci"
 fi
 
+# ── generate any missing images, right here ──
+# Idempotent: only makes what doesn't exist, so a normal deploy is a no-op and
+# adding catalog items just works without a 130MB upload.
+echo "==> catalog: $(ls "$APP/public/catalog" | wc -l) images present"
+sudo -u xirevoa npx tsx --env-file=.env scripts/seed-catalog.ts
+sudo -u xirevoa npx tsx --env-file=.env scripts/seed-haircuts.ts
+
 # ── build (incremental: .next/cache survives) ──
 echo "==> building"
 sudo -u xirevoa npm run build
 
-# ── schema (cheap, and a no-op when nothing changed) ──
 sudo -u xirevoa npx prisma db push --accept-data-loss
 sudo -u xirevoa npx tsx --env-file=.env scripts/seed-db.ts
 
