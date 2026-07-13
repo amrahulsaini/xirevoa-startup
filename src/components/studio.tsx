@@ -14,6 +14,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import {
   AlertCircle,
+  Camera as CameraIcon,
   Check,
   Download,
   Layers,
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 import { Spinner } from "./spinner";
 import { StylistPanel } from "./stylist-panel";
+import { PoseCamera } from "./pose-camera";
 import { ensurePermission, pushNote } from "@/lib/notifications";
 import {
   addRecent,
@@ -71,6 +73,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
     null,
   );
   const fileInput = useRef<HTMLInputElement>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
   const router = useRouter();
 
   const [limit, setLimit] = useState(PAGE_SIZE);
@@ -140,13 +143,20 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
   }, []);
 
   /** Re-use a previously uploaded photo. */
-  const usePhoto = useCallback((full: string) => {
+  const selectPhoto = useCallback((full: string) => {
     setPerson(full);
     setResult(null);
     setResultPainted(false);
     setStage("idle");
     setError(null);
   }, []);
+
+  /** A shot from the pose camera. Same path as an upload, minus the file picker. */
+  const handleCapture = useCallback(async (dataUrl: string) => {
+    setCameraOpen(false);
+    selectPhoto(dataUrl);
+    addRecent(dataUrl, await makeThumb(dataUrl));
+  }, [selectPhoto]);
 
   const fit = async () => {
     if (!person || look.length === 0) return;
@@ -205,6 +215,10 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
 
   return (
     <div className="mx-auto max-w-7xl px-6 pt-32 pb-24">
+      {cameraOpen && (
+        <PoseCamera onCapture={handleCapture} onClose={() => setCameraOpen(false)} />
+      )}
+
       <header className="mb-12">
         <h1 className="font-display text-5xl text-bone-50 sm:text-6xl">
           The <span className="text-flare italic">Studio</span>
@@ -237,6 +251,18 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
             }}
           />
 
+          {/* The camera is the better path — it coaches the shot instead of
+              accepting whatever's in the camera roll. */}
+          {!person && (
+            <button
+              onClick={() => setCameraOpen(true)}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-bone-100 px-6 py-3.5 text-sm font-medium text-ink-950 transition-transform duration-300 hover:scale-[1.02] active:scale-95"
+            >
+              <CameraIcon className="size-4" />
+              Take a photo — we&apos;ll pose you
+            </button>
+          )}
+
           <input
             ref={fileInput}
             type="file"
@@ -252,7 +278,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
           <RecentStrip
             recent={recent}
             current={person}
-            onUse={usePhoto}
+            onUse={selectPhoto}
             onUpload={() => fileInput.current?.click()}
             onRemove={removeRecent}
           />

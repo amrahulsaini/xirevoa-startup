@@ -47,9 +47,10 @@ fi
 # ── generate any missing images, right here ──
 # Idempotent: only makes what doesn't exist, so a normal deploy is a no-op and
 # adding catalog items just works without a 130MB upload.
-echo "==> catalog: $(ls "$APP/public/catalog" | wc -l) images present"
+echo "==> catalog: $(ls "$APP/public/catalog" 2>/dev/null | wc -l) images present"
 sudo -u xirevoa npx tsx --env-file=.env scripts/seed-catalog.ts
 sudo -u xirevoa npx tsx --env-file=.env scripts/seed-haircuts.ts
+sudo -u xirevoa npx tsx --env-file=.env scripts/seed-poses.ts
 
 # ── build (incremental: .next/cache survives) ──
 echo "==> building"

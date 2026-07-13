@@ -12,7 +12,8 @@
     "seed:db": "tsx --env-file=.env.local scripts/seed-db.ts",
     "db:push": "prisma db push",
     "postinstall": "prisma generate",
-    "seed:haircuts": "tsx --env-file=.env.local scripts/seed-haircuts.ts"
+    "seed:haircuts": "tsx --env-file=.env.local scripts/seed-haircuts.ts",
+    "seed:poses": "tsx --env-file=.env.local scripts/seed-poses.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",

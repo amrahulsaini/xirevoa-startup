@@ -77,3 +77,4 @@ deploy/.setup-dbui.lf.sh
 # than being rebuilt from scratch.
 /public/catalog
 /public/haircuts
+/public/poses

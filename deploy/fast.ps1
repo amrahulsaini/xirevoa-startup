@@ -32,7 +32,7 @@ $code = Join-Path $env:TEMP 'code.tgz'
 tar -czf $code `
   --exclude='./node_modules' --exclude='./.git' --exclude='.next' `
   --exclude='./storage' --exclude='./src/generated' `
-  --exclude='./public/catalog' --exclude='./public/haircuts' `
+  --exclude='./public/catalog' --exclude='./public/haircuts' --exclude='./public/poses' `
   prisma src scripts public package.json package-lock.json next.config.ts `
   tsconfig.json postcss.config.mjs prisma.config.ts eslint.config.mjs
 
