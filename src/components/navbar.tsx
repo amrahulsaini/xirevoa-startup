@@ -11,11 +11,11 @@ import { NotificationBell } from "./notification-bell";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
-  { href: "/collection", label: "Collection" },
   { href: "/studio", label: "Studio" },
   { href: "/salon", label: "Salon" },
+  { href: "/collection", label: "Collection" },
+  { href: "/feed", label: "Feed" },
   { href: "/looks", label: "Looks" },
-  { href: "/pricing", label: "XPoints" },
 ];
 
 export interface NavUser {
