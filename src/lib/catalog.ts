@@ -8,6 +8,8 @@ export interface CatalogItem {
   tagline: string;
   /** Fit/variant chip — the thing shoppers actually filter on. */
   fit?: string;
+  /** Who the piece is cut for. The stylist filters on this. */
+  gender: Gender;
   /** The generation prompt. This IS the product; treat edits as design changes. */
   prompt: string;
   /** Local path, filled from the slug. */
@@ -26,12 +28,23 @@ export interface CatalogItem {
  * Store inventory replaces them later.
  */
 
+/**
+ * Who a piece is cut for.
+ *
+ * Needed because the stylist reads a photo and picks from the whole catalog —
+ * without this it happily put a women's kurti on a man. Most pieces genuinely
+ * are unisex; only mark `men`/`women` where the cut actually is.
+ */
+export type Gender = "men" | "women" | "unisex";
+
 interface Style {
   key: string;
   name: string;
   fit?: string;
   /** Describes the cut/silhouette for the prompt. */
   desc: string;
+  /** Overrides the category's gender for this one style. */
+  gender?: Gender;
 }
 interface Colour {
   key: string;
@@ -43,6 +56,8 @@ interface CategorySpec {
   category: Category;
   /** How the item is staged for its flat-lay shot. */
   noun: string;
+  /** Who this category is cut for. Individual styles can override. */
+  gender: Gender;
   styles: Style[];
   colours: Colour[];
   taglines: string[];
@@ -52,6 +67,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "jeans",
     noun: "pair of jeans",
+    gender: "unisex",
     styles: [
       { key: "baggy", name: "Baggy", fit: "Baggy", desc: "baggy wide-leg jeans with a relaxed high waist and deep front pockets" },
       { key: "straight", name: "Straight", fit: "Straight", desc: "straight-fit jeans with a classic five-pocket layout and copper rivets" },
@@ -59,7 +75,7 @@ const SPECS: CategorySpec[] = [
       { key: "slim", name: "Slim", fit: "Slim", desc: "slim-fit jeans tapered to a narrow ankle" },
       { key: "wideleg", name: "Wide-Leg", fit: "Wide-Leg", desc: "high-rise wide-leg jeans with a long fluid drape to the floor" },
       { key: "cargo", name: "Cargo", fit: "Cargo", desc: "relaxed cargo jeans with utility flap pockets down each leg" },
-      { key: "mom", name: "Mom", fit: "Mom", desc: "high-waisted mom jeans with a tapered ankle and slightly slouchy seat" },
+      { key: "mom", name: "Mom", fit: "Mom", desc: "high-waisted mom jeans with a tapered ankle and slightly slouchy seat" , gender: "women" },
       { key: "skinny", name: "Skinny", fit: "Skinny", desc: "skinny jeans with a close body-hugging cut all the way down" },
     ],
     colours: [
@@ -74,6 +90,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "tshirt",
     noun: "t-shirt",
+    gender: "unisex",
     styles: [
       { key: "oversized", name: "Oversized", fit: "Oversized", desc: "an oversized drop-shoulder t-shirt with a boxy body" },
       { key: "boxy", name: "Boxy", fit: "Boxy", desc: "a heavyweight boxy t-shirt with structured shoulders and a cropped hem" },
@@ -96,6 +113,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "shirt",
     noun: "shirt",
+    gender: "unisex",
     styles: [
       { key: "camp", name: "Camp Collar", fit: "Relaxed", desc: "a relaxed short-sleeve camp-collar shirt" },
       { key: "oxford", name: "Oxford", fit: "Regular", desc: "a button-down oxford shirt with a structured collar" },
@@ -116,6 +134,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "jacket",
     noun: "jacket",
+    gender: "unisex",
     styles: [
       { key: "trucker", name: "Trucker", fit: "Classic", desc: "a classic trucker denim jacket with two chest flap pockets" },
       { key: "bomber", name: "Bomber", fit: "Regular", desc: "a bomber jacket with ribbed collar, cuffs and hem" },
@@ -135,6 +154,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "glasses",
     noun: "pair of glasses",
+    gender: "unisex",
     styles: [
       { key: "aviator", name: "Aviator", desc: "aviator sunglasses with a thin metal frame and a double brow bar" },
       { key: "wayfarer", name: "Wayfarer", desc: "wayfarer sunglasses with a bold angular acetate frame" },
@@ -155,13 +175,14 @@ const SPECS: CategorySpec[] = [
   {
     category: "jewellery",
     noun: "piece of jewellery",
+    gender: "unisex",
     styles: [
       { key: "cuban", name: "Cuban Chain", desc: "a chunky Cuban link chain necklace with thick interlocking flat links" },
       { key: "rope", name: "Rope Chain", desc: "a twisted rope chain necklace" },
-      { key: "jhumka", name: "Jhumka", desc: "a pair of traditional Indian jhumka earrings with an engraved bell and a fringe of tiny dangling beads" },
-      { key: "hoops", name: "Hoops", desc: "a pair of medium hoop earrings" },
+      { key: "jhumka", name: "Jhumka", desc: "a pair of traditional Indian jhumka earrings with an engraved bell and a fringe of tiny dangling beads" , gender: "women" },
+      { key: "hoops", name: "Hoops", desc: "a pair of medium hoop earrings" , gender: "women" },
       { key: "studs", name: "Studs", desc: "a pair of small round stud earrings" },
-      { key: "bangle", name: "Bangle", desc: "a slim engraved bangle bracelet" },
+      { key: "bangle", name: "Bangle", desc: "a slim engraved bangle bracelet" , gender: "women" },
       { key: "kada", name: "Kada", desc: "a broad traditional Indian kada cuff with etched detailing" },
       { key: "pendant", name: "Pendant", desc: "a fine chain necklace with a small geometric pendant" },
     ],
@@ -178,6 +199,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "tops",
     noun: "top",
+    gender: "women",
     styles: [
       { key: "crop", name: "Crop Top", fit: "Cropped", desc: "a fitted crop top with short sleeves and a straight cropped hem" },
       { key: "peplum", name: "Peplum Top", fit: "Fitted", desc: "a peplum top, fitted through the bodice with a flared ruffle at the waist" },
@@ -198,6 +220,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "kurti",
     noun: "kurti",
+    gender: "women",
     styles: [
       { key: "straight", name: "Straight Kurti", fit: "Straight", desc: "a straight-cut knee-length kurti with side slits and a mandarin collar" },
       { key: "anarkali", name: "Anarkali", fit: "Flared", desc: "an Anarkali kurti, fitted at the bodice and flaring into a full floor-length skirt" },
@@ -218,12 +241,13 @@ const SPECS: CategorySpec[] = [
   {
     category: "formal",
     noun: "formal outfit",
+    gender: "unisex",
     styles: [
       { key: "blazer", name: "Blazer", fit: "Tailored", desc: "a single-breasted tailored blazer with notch lapels" },
       { key: "pantsuit", name: "Pantsuit", fit: "Tailored", desc: "a matching two-piece trouser suit with a tailored jacket and straight-leg trousers" },
-      { key: "sheath", name: "Sheath Dress", fit: "Fitted", desc: "a knee-length fitted sheath dress with a boat neckline and short sleeves" },
-      { key: "pencil-skirt", name: "Pencil Skirt", fit: "Fitted", desc: "a high-waisted knee-length pencil skirt with a back vent" },
-      { key: "shirt-dress", name: "Shirt Dress", fit: "Relaxed", desc: "a belted midi shirt dress with a collar and button-through front" },
+      { key: "sheath", name: "Sheath Dress", fit: "Fitted", desc: "a knee-length fitted sheath dress with a boat neckline and short sleeves" , gender: "women" },
+      { key: "pencil-skirt", name: "Pencil Skirt", fit: "Fitted", desc: "a high-waisted knee-length pencil skirt with a back vent" , gender: "women" },
+      { key: "shirt-dress", name: "Shirt Dress", fit: "Relaxed", desc: "a belted midi shirt dress with a collar and button-through front" , gender: "women" },
       { key: "wide-trouser", name: "Wide Trousers", fit: "Wide-Leg", desc: "high-waisted wide-leg formal trousers with a sharp front crease" },
     ],
     colours: [
@@ -238,6 +262,7 @@ const SPECS: CategorySpec[] = [
   {
     category: "shoes",
     noun: "pair of shoes",
+    gender: "unisex",
     styles: [
       { key: "sneaker", name: "Low Sneaker", fit: "Sneaker", desc: "a low-top leather sneaker with a cupsole" },
       { key: "hightop", name: "High-Top", fit: "Sneaker", desc: "a high-top canvas sneaker" },
@@ -286,6 +311,9 @@ function build(): CatalogItem[] {
           name: `${colour.name} ${style.name}`,
           category: spec.category,
           fit: style.fit,
+          // A style can override its category — mom jeans and jhumkas are
+          // women's even though denim and jewellery are otherwise unisex.
+          gender: style.gender ?? spec.gender,
           tagline: spec.taglines[n % spec.taglines.length],
           image: `/catalog/${slug}.png`,
           prompt:

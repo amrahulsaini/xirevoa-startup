@@ -23,6 +23,7 @@ import {
   X,
 } from "lucide-react";
 import { Spinner } from "./spinner";
+import { StylistPanel } from "./stylist-panel";
 import { ensurePermission, pushNote } from "@/lib/notifications";
 import {
   addRecent,
@@ -254,6 +255,13 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
             onUse={usePhoto}
             onUpload={() => fileInput.current?.click()}
             onRemove={removeRecent}
+          />
+
+          {/* The stylist turns 335 items into one decision: fit it, or don't. */}
+          <StylistPanel
+            person={person}
+            disabled={stage === "fitting"}
+            onPicked={(slugs) => setLook(slugs.slice(0, MAX_LAYERS))}
           />
 
           <LookStack look={look} onRemove={(slug) => setLook((l) => l.filter((s) => s !== slug))} />
