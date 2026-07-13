@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   useSyncExternalStore,
@@ -17,6 +18,7 @@ import {
   Download,
   Layers,
   RotateCcw,
+  Search,
   Upload,
   X,
 } from "lucide-react";
@@ -80,10 +82,24 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
     recentServerSnapshot,
   );
 
-  const visible =
-    category === "all"
-      ? CATALOG
-      : CATALOG.filter((item) => item.category === category);
+  const [query, setQuery] = useState("");
+
+  // 335 pieces behind a category chip and a 12-item page is not browsable.
+  // Search across name, fit, tagline and category so "baggy", "kurti", "olive"
+  // and "chelsea" all land.
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return CATALOG.filter((item) => {
+      if (category !== "all" && item.category !== category) return false;
+      if (!q) return true;
+      return (
+        item.name.toLowerCase().includes(q) ||
+        item.fit?.toLowerCase().includes(q) ||
+        item.tagline.toLowerCase().includes(q) ||
+        item.category.includes(q)
+      );
+    });
+  }, [category, query]);
 
   const shown = visible.slice(0, limit);
 
@@ -311,6 +327,29 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
 
         {/* ───────────── Right: the rail ───────────── */}
         <div>
+          <div className="relative mb-4">
+            <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-bone-500" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setLimit(PAGE_SIZE);
+              }}
+              placeholder="Search 335 pieces — baggy, kurti, olive, chelsea…"
+              className="hairline w-full rounded-full border bg-ink-900 py-3 pr-10 pl-11 text-sm text-bone-100 placeholder:text-bone-500"
+            />
+            {query && (
+              <button
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+                className="absolute top-1/2 right-3 grid size-6 -translate-y-1/2 place-items-center rounded-full text-bone-400 hover:text-bone-100"
+              >
+                <X className="size-4" />
+              </button>
+            )}
+          </div>
+
           <div className="mb-6 flex flex-wrap gap-2">
             {CATEGORIES.map((c) => (
               <button
@@ -327,6 +366,15 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
               </button>
             ))}
           </div>
+
+          {visible.length === 0 && (
+            <div className="hairline rounded-2xl border border-dashed py-20 text-center">
+              <p className="font-medium text-bone-100">Nothing matches “{query}”.</p>
+              <p className="mt-2 text-sm text-bone-400">
+                Try a fit, colour or style — “bootcut”, “anarkali”, “loafer”.
+              </p>
+            </div>
+          )}
 
           <motion.div layout className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             <AnimatePresence mode="popLayout">
