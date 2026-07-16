@@ -1384,6 +1384,7 @@ export const LookScalarFieldEnum = {
   imageKey: 'imageKey',
   cacheKey: 'cacheKey',
   shared: 'shared',
+  inFeed: 'inFeed',
   createdAt: 'createdAt'
 } as const
 

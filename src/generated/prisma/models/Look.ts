@@ -36,6 +36,7 @@ export type LookMinAggregateOutputType = {
   imageKey: string | null
   cacheKey: string | null
   shared: boolean | null
+  inFeed: boolean | null
   createdAt: Date | null
 }
 
@@ -47,6 +48,7 @@ export type LookMaxAggregateOutputType = {
   imageKey: string | null
   cacheKey: string | null
   shared: boolean | null
+  inFeed: boolean | null
   createdAt: Date | null
 }
 
@@ -58,6 +60,7 @@ export type LookCountAggregateOutputType = {
   imageKey: number
   cacheKey: number
   shared: number
+  inFeed: number
   createdAt: number
   _all: number
 }
@@ -71,6 +74,7 @@ export type LookMinAggregateInputType = {
   imageKey?: true
   cacheKey?: true
   shared?: true
+  inFeed?: true
   createdAt?: true
 }
 
@@ -82,6 +86,7 @@ export type LookMaxAggregateInputType = {
   imageKey?: true
   cacheKey?: true
   shared?: true
+  inFeed?: true
   createdAt?: true
 }
 
@@ -93,6 +98,7 @@ export type LookCountAggregateInputType = {
   imageKey?: true
   cacheKey?: true
   shared?: true
+  inFeed?: true
   createdAt?: true
   _all?: true
 }
@@ -177,6 +183,7 @@ export type LookGroupByOutputType = {
   imageKey: string
   cacheKey: string
   shared: boolean
+  inFeed: boolean
   createdAt: Date
   _count: LookCountAggregateOutputType | null
   _min: LookMinAggregateOutputType | null
@@ -209,6 +216,7 @@ export type LookWhereInput = {
   imageKey?: Prisma.StringFilter<"Look"> | string
   cacheKey?: Prisma.StringFilter<"Look"> | string
   shared?: Prisma.BoolFilter<"Look"> | boolean
+  inFeed?: Prisma.BoolFilter<"Look"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Look"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   garments?: Prisma.LookGarmentListRelationFilter
@@ -222,6 +230,7 @@ export type LookOrderByWithRelationInput = {
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
+  inFeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   garments?: Prisma.LookGarmentOrderByRelationAggregateInput
@@ -238,6 +247,7 @@ export type LookWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringNullableFilter<"Look"> | string | null
   imageKey?: Prisma.StringFilter<"Look"> | string
   shared?: Prisma.BoolFilter<"Look"> | boolean
+  inFeed?: Prisma.BoolFilter<"Look"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Look"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   garments?: Prisma.LookGarmentListRelationFilter
@@ -251,6 +261,7 @@ export type LookOrderByWithAggregationInput = {
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
+  inFeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.LookCountOrderByAggregateInput
   _max?: Prisma.LookMaxOrderByAggregateInput
@@ -268,6 +279,7 @@ export type LookScalarWhereWithAggregatesInput = {
   imageKey?: Prisma.StringWithAggregatesFilter<"Look"> | string
   cacheKey?: Prisma.StringWithAggregatesFilter<"Look"> | string
   shared?: Prisma.BoolWithAggregatesFilter<"Look"> | boolean
+  inFeed?: Prisma.BoolWithAggregatesFilter<"Look"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Look"> | Date | string
 }
 
@@ -278,6 +290,7 @@ export type LookCreateInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutLooksInput
   garments?: Prisma.LookGarmentCreateNestedManyWithoutLookInput
@@ -291,6 +304,7 @@ export type LookUncheckedCreateInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
   garments?: Prisma.LookGarmentUncheckedCreateNestedManyWithoutLookInput
 }
@@ -302,6 +316,7 @@ export type LookUpdateInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutLooksNestedInput
   garments?: Prisma.LookGarmentUpdateManyWithoutLookNestedInput
@@ -315,6 +330,7 @@ export type LookUncheckedUpdateInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   garments?: Prisma.LookGarmentUncheckedUpdateManyWithoutLookNestedInput
 }
@@ -327,6 +343,7 @@ export type LookCreateManyInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
 }
 
@@ -337,6 +354,7 @@ export type LookUpdateManyMutationInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -348,6 +366,7 @@ export type LookUncheckedUpdateManyInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -369,6 +388,7 @@ export type LookCountOrderByAggregateInput = {
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
+  inFeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -380,6 +400,7 @@ export type LookMaxOrderByAggregateInput = {
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
+  inFeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -391,6 +412,7 @@ export type LookMinOrderByAggregateInput = {
   imageKey?: Prisma.SortOrder
   cacheKey?: Prisma.SortOrder
   shared?: Prisma.SortOrder
+  inFeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -466,6 +488,7 @@ export type LookCreateWithoutUserInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
   garments?: Prisma.LookGarmentCreateNestedManyWithoutLookInput
 }
@@ -477,6 +500,7 @@ export type LookUncheckedCreateWithoutUserInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
   garments?: Prisma.LookGarmentUncheckedCreateNestedManyWithoutLookInput
 }
@@ -518,6 +542,7 @@ export type LookScalarWhereInput = {
   imageKey?: Prisma.StringFilter<"Look"> | string
   cacheKey?: Prisma.StringFilter<"Look"> | string
   shared?: Prisma.BoolFilter<"Look"> | boolean
+  inFeed?: Prisma.BoolFilter<"Look"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Look"> | Date | string
 }
 
@@ -528,6 +553,7 @@ export type LookCreateWithoutGarmentsInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutLooksInput
 }
@@ -540,6 +566,7 @@ export type LookUncheckedCreateWithoutGarmentsInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
 }
 
@@ -566,6 +593,7 @@ export type LookUpdateWithoutGarmentsInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutLooksNestedInput
 }
@@ -578,6 +606,7 @@ export type LookUncheckedUpdateWithoutGarmentsInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -588,6 +617,7 @@ export type LookCreateManyUserInput = {
   imageKey: string
   cacheKey: string
   shared?: boolean
+  inFeed?: boolean
   createdAt?: Date | string
 }
 
@@ -598,6 +628,7 @@ export type LookUpdateWithoutUserInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   garments?: Prisma.LookGarmentUpdateManyWithoutLookNestedInput
 }
@@ -609,6 +640,7 @@ export type LookUncheckedUpdateWithoutUserInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   garments?: Prisma.LookGarmentUncheckedUpdateManyWithoutLookNestedInput
 }
@@ -620,6 +652,7 @@ export type LookUncheckedUpdateManyWithoutUserInput = {
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   cacheKey?: Prisma.StringFieldUpdateOperationsInput | string
   shared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inFeed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -662,6 +695,7 @@ export type LookSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
+  inFeed?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   garments?: boolean | Prisma.Look$garmentsArgs<ExtArgs>
@@ -676,6 +710,7 @@ export type LookSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
+  inFeed?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["look"]>
@@ -688,6 +723,7 @@ export type LookSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
+  inFeed?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["look"]>
@@ -700,10 +736,11 @@ export type LookSelectScalar = {
   imageKey?: boolean
   cacheKey?: boolean
   shared?: boolean
+  inFeed?: boolean
   createdAt?: boolean
 }
 
-export type LookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "kind" | "title" | "imageKey" | "cacheKey" | "shared" | "createdAt", ExtArgs["result"]["look"]>
+export type LookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "kind" | "title" | "imageKey" | "cacheKey" | "shared" | "inFeed" | "createdAt", ExtArgs["result"]["look"]>
 export type LookInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   garments?: boolean | Prisma.Look$garmentsArgs<ExtArgs>
@@ -741,10 +778,17 @@ export type $LookPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
      */
     cacheKey: string
     /**
-     * Off by default. A look is a photo of the user's face — it only becomes
-     * publicly reachable if they explicitly share it.
+     * A share LINK exists — /share/<id> resolves for anyone holding it.
+     * Off by default: a look is a photo of the user's face.
      */
     shared: boolean
+    /**
+     * Listed on the public /feed. Deliberately SEPARATE from `shared`:
+     * sending a friend a link and publishing yourself to a public gallery are
+     * different decisions, and conflating them meant tapping "Share" (or even
+     * cancelling the share sheet) silently posted you to the feed.
+     */
+    inFeed: boolean
     createdAt: Date
   }, ExtArgs["result"]["look"]>
   composites: {}
@@ -1178,6 +1222,7 @@ export interface LookFieldRefs {
   readonly imageKey: Prisma.FieldRef<"Look", 'String'>
   readonly cacheKey: Prisma.FieldRef<"Look", 'String'>
   readonly shared: Prisma.FieldRef<"Look", 'Boolean'>
+  readonly inFeed: Prisma.FieldRef<"Look", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Look", 'DateTime'>
 }
     

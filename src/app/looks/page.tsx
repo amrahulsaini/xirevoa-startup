@@ -36,6 +36,7 @@ export default async function LooksPage({
         ? (l.title ?? "Haircut")
         : l.garments.map((g) => g.garment.name).join(" · ") || "Try-on",
     createdAt: l.createdAt.toISOString(),
+    inFeed: l.inFeed,
   }));
 
   return (
@@ -45,8 +46,9 @@ export default async function LooksPage({
           Your <span className="text-flare italic">Looks</span>
         </h1>
         <p className="mt-4 max-w-lg text-bone-400">
-          Everything you&apos;ve generated — outfits and haircuts. Private to you;
-          nobody else can see these.
+          Everything you&apos;ve generated — outfits and haircuts. Private by
+          default. Use the globe to put one on the public feed, or take it off
+          again.
         </p>
       </header>
 

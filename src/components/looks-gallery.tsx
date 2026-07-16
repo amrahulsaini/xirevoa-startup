@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Download, Maximize2, X } from "lucide-react";
 import { ShareButton } from "./share-button";
+import { FeedToggle } from "./feed-toggle";
 import { cn } from "@/lib/cn";
 
 export interface LookCard {
@@ -12,12 +13,16 @@ export interface LookCard {
   url: string;
   title: string;
   createdAt: string;
+  /** Listed on the public feed. Separate from having a share link. */
+  inFeed: boolean;
 }
 
 const TABS = [
   { id: "all", label: "Everything" },
   { id: "tryon", label: "Outfits" },
   { id: "haircut", label: "Haircuts" },
+  // So you can audit what you've made public without hunting through the grid.
+  { id: "feed", label: "On feed" },
 ] as const;
 
 /**
@@ -37,11 +42,18 @@ export function LooksGallery({
   const [kind, setKind] = useState(initialKind);
   const [zoom, setZoom] = useState<LookCard | null>(null);
 
-  const visible = kind === "all" ? cards : cards.filter((c) => c.kind === kind);
+  const visible =
+    kind === "all"
+      ? cards
+      : kind === "feed"
+        ? cards.filter((c) => c.inFeed)
+        : cards.filter((c) => c.kind === kind);
+
   const counts = {
     all: cards.length,
     tryon: cards.filter((c) => c.kind === "tryon").length,
     haircut: cards.filter((c) => c.kind === "haircut").length,
+    feed: cards.filter((c) => c.inFeed).length,
   };
 
   return (
@@ -99,6 +111,7 @@ export function LooksGallery({
                   >
                     <Maximize2 className="size-4" />
                   </button>
+                  <FeedToggle compact lookId={c.id} inFeed={c.inFeed} />
                   <ShareButton compact lookId={c.id} label={c.title} />
                   <a
                     href={c.url}
@@ -113,6 +126,14 @@ export function LooksGallery({
                 <span className="glass absolute top-3 left-3 rounded-full px-2.5 py-1 text-[10px] tracking-wide text-bone-200 uppercase">
                   {c.kind === "haircut" ? "Haircut" : "Outfit"}
                 </span>
+
+                {/* Always visible, not just on hover — you should be able to see
+                    at a glance what's public without touching anything. */}
+                {c.inFeed && (
+                  <span className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-flare-rose px-2.5 py-1 text-[10px] font-medium tracking-wide text-bone-50 uppercase">
+                    On feed
+                  </span>
+                )}
               </div>
 
               <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-bone-300">
@@ -127,7 +148,7 @@ export function LooksGallery({
               </p>
 
               {/* Always visible on touch, where hover doesn't exist. */}
-              <div className="mt-3 grid grid-cols-2 gap-2 lg:hidden">
+              <div className="mt-3 grid grid-cols-3 gap-2 lg:hidden">
                 <a
                   href={c.url}
                   download={`xirevoa-${c.kind}-${c.id.slice(0, 6)}.png`}
@@ -136,11 +157,8 @@ export function LooksGallery({
                   <Download className="size-3.5" />
                   Save
                 </a>
-                <ShareButton
-                  lookId={c.id}
-                  label={c.title}
-                  className="py-2 text-xs"
-                />
+                <ShareButton lookId={c.id} label={c.title} className="py-2 text-xs" />
+                <FeedToggle lookId={c.id} inFeed={c.inFeed} />
               </div>
             </motion.div>
           ))}
@@ -173,6 +191,11 @@ export function LooksGallery({
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                 <p className="text-sm text-bone-300">{zoom.title}</p>
                 <div className="flex items-center gap-2">
+                  <FeedToggle
+                    lookId={zoom.id}
+                    inFeed={zoom.inFeed}
+                    className="px-4 py-2.5 text-sm"
+                  />
                   <ShareButton
                     lookId={zoom.id}
                     label={zoom.title}

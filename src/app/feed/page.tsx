@@ -15,9 +15,10 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function FeedPage() {
-  // Only looks the owner explicitly shared. Nothing here is opt-out.
+  // `inFeed`, not `shared` — a share link is not consent to be on a public
+  // gallery. Nothing appears here that its owner didn't explicitly post.
   const looks = await prisma.look.findMany({
-    where: { shared: true },
+    where: { inFeed: true },
     orderBy: { createdAt: "desc" },
     take: 60,
     include: {
