@@ -6,7 +6,12 @@ import { setShared } from "@/app/share/actions";
 import { cn } from "@/lib/cn";
 
 /**
- * Share a look.
+ * Share a look — as a LINK only.
+ *
+ * This creates a private link and nothing more. It does NOT put the look on the
+ * public feed; that's the FeedToggle, and it's a separate decision. Conflating
+ * the two meant tapping Share to send a friend a photo also posted you to a
+ * public gallery.
  *
  * Two things have to happen before a link is worth anything:
  *   1. The look must be marked shared — until then /share/<id> 404s, because a

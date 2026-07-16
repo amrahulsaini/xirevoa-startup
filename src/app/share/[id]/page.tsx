@@ -7,10 +7,14 @@ import { Aurora } from "@/components/aurora";
 import { Logo } from "@/components/logo";
 import { Reveal } from "@/components/reveal";
 
-/** Only a look the owner has explicitly shared is ever visible here. */
+/**
+ * Only a look the owner explicitly shared (link) or posted (feed) is visible.
+ * Feed items link here, so either flag has to resolve — otherwise the feed would
+ * be full of 404s.
+ */
 async function getShared(id: string) {
   const look = await prisma.look.findFirst({
-    where: { id, shared: true },
+    where: { id, OR: [{ shared: true }, { inFeed: true }] },
     include: {
       garments: { include: { garment: true } },
       user: { select: { username: true } },

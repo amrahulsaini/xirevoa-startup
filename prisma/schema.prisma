@@ -240,15 +240,23 @@ model Look {
   /// instead of paying Gemini for an image we already have.
   cacheKey String @unique
 
-  /// Off by default. A look is a photo of the user's face — it only becomes
-  /// publicly reachable if they explicitly share it.
-  shared    Boolean  @default(false)
+  /// A share LINK exists — /share/<id> resolves for anyone holding it.
+  /// Off by default: a look is a photo of the user's face.
+  shared Boolean @default(false)
+
+  /// Listed on the public /feed. Deliberately SEPARATE from `shared`:
+  /// sending a friend a link and publishing yourself to a public gallery are
+  /// different decisions, and conflating them meant tapping "Share" (or even
+  /// cancelling the share sheet) silently posted you to the feed.
+  inFeed Boolean @default(false)
+
   createdAt DateTime @default(now())
 
   garments LookGarment[]
 
   @@index([userId, createdAt])
   @@index([userId, kind])
+  @@index([inFeed, createdAt])
 }
 
 model LookGarment {
