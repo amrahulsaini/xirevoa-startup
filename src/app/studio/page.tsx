@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Studio } from "@/components/studio";
 import { gateUsername } from "@/lib/session";
+import { getShopProducts } from "@/lib/shop";
 
 export const metadata: Metadata = {
   title: "Try-On Studio",
@@ -16,6 +17,11 @@ export default async function StudioPage({
   const { add } = await searchParams;
   // Usable signed out, but a signed-in user without a username picks one first.
   await gateUsername(`/studio${add ? `?add=${add}` : ""}`);
+
+  // Real, buyable products (affiliate feeds / stores) so they show in the rail
+  // and can be tried on and bought right here.
+  const products = await getShopProducts();
+
   // Deep link from a collection card: /studio?add=tiger-tee pre-selects the piece.
-  return <Studio initialSlug={add} />;
+  return <Studio initialSlug={add} products={products} />;
 }

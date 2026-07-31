@@ -194,9 +194,23 @@ model Garment {
   /// Storage key of the flat-lay product shot fed to the try-on engine.
   imageKey String
 
-  /// Deliberately nullable. We show no prices while onboarding stores —
-  /// shoppers are here to see themselves in the garment, not to buy yet.
+  /// Nullable for Xirevoa's own demo pieces. Real (affiliate/store) products
+  /// carry a price so shoppers know what they're buying.
   priceInPaise Int?
+
+  /// ── Real, buyable products (affiliate feeds or store inventory) ──
+  /// The affiliate deep link. When present, the UI shows a "Buy" button and this
+  /// is what earns commission. Null = a Xirevoa demo piece, try-on only.
+  buyUrl String?
+  brand  String?
+  /// Where it came from — "myntra", "amazon", "earnkaro", "store", or null for
+  /// our own catalog. Lets us attribute revenue and filter a real Shop from the
+  /// AI demo collection.
+  source String?
+  /// True if the source image is a garment ON A MODEL (marketplace listing)
+  /// rather than a flat-lay. Verified to still transfer cleanly, but the try-on
+  /// prompt leans harder on "ignore the model" for these.
+  onModel Boolean @default(false)
 
   storeId String?
   store   Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -205,6 +219,8 @@ model Garment {
   createdAt DateTime @default(now())
 
   looks LookGarment[]
+
+  @@index([source, published])
 
   @@index([category, published])
   @@index([storeId])

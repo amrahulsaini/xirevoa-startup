@@ -47,6 +47,10 @@ export type GarmentMinAggregateOutputType = {
   tagline: string | null
   imageKey: string | null
   priceInPaise: number | null
+  buyUrl: string | null
+  brand: string | null
+  source: string | null
+  onModel: boolean | null
   storeId: string | null
   published: boolean | null
   createdAt: Date | null
@@ -61,6 +65,10 @@ export type GarmentMaxAggregateOutputType = {
   tagline: string | null
   imageKey: string | null
   priceInPaise: number | null
+  buyUrl: string | null
+  brand: string | null
+  source: string | null
+  onModel: boolean | null
   storeId: string | null
   published: boolean | null
   createdAt: Date | null
@@ -75,6 +83,10 @@ export type GarmentCountAggregateOutputType = {
   tagline: number
   imageKey: number
   priceInPaise: number
+  buyUrl: number
+  brand: number
+  source: number
+  onModel: number
   storeId: number
   published: number
   createdAt: number
@@ -99,6 +111,10 @@ export type GarmentMinAggregateInputType = {
   tagline?: true
   imageKey?: true
   priceInPaise?: true
+  buyUrl?: true
+  brand?: true
+  source?: true
+  onModel?: true
   storeId?: true
   published?: true
   createdAt?: true
@@ -113,6 +129,10 @@ export type GarmentMaxAggregateInputType = {
   tagline?: true
   imageKey?: true
   priceInPaise?: true
+  buyUrl?: true
+  brand?: true
+  source?: true
+  onModel?: true
   storeId?: true
   published?: true
   createdAt?: true
@@ -127,6 +147,10 @@ export type GarmentCountAggregateInputType = {
   tagline?: true
   imageKey?: true
   priceInPaise?: true
+  buyUrl?: true
+  brand?: true
+  source?: true
+  onModel?: true
   storeId?: true
   published?: true
   createdAt?: true
@@ -228,6 +252,10 @@ export type GarmentGroupByOutputType = {
   tagline: string | null
   imageKey: string
   priceInPaise: number | null
+  buyUrl: string | null
+  brand: string | null
+  source: string | null
+  onModel: boolean
   storeId: string | null
   published: boolean
   createdAt: Date
@@ -265,6 +293,10 @@ export type GarmentWhereInput = {
   tagline?: Prisma.StringNullableFilter<"Garment"> | string | null
   imageKey?: Prisma.StringFilter<"Garment"> | string
   priceInPaise?: Prisma.IntNullableFilter<"Garment"> | number | null
+  buyUrl?: Prisma.StringNullableFilter<"Garment"> | string | null
+  brand?: Prisma.StringNullableFilter<"Garment"> | string | null
+  source?: Prisma.StringNullableFilter<"Garment"> | string | null
+  onModel?: Prisma.BoolFilter<"Garment"> | boolean
   storeId?: Prisma.StringNullableFilter<"Garment"> | string | null
   published?: Prisma.BoolFilter<"Garment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Garment"> | Date | string
@@ -281,6 +313,10 @@ export type GarmentOrderByWithRelationInput = {
   tagline?: Prisma.SortOrderInput | Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   priceInPaise?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  brand?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrderInput | Prisma.SortOrder
+  onModel?: Prisma.SortOrder
   storeId?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -300,6 +336,10 @@ export type GarmentWhereUniqueInput = Prisma.AtLeast<{
   tagline?: Prisma.StringNullableFilter<"Garment"> | string | null
   imageKey?: Prisma.StringFilter<"Garment"> | string
   priceInPaise?: Prisma.IntNullableFilter<"Garment"> | number | null
+  buyUrl?: Prisma.StringNullableFilter<"Garment"> | string | null
+  brand?: Prisma.StringNullableFilter<"Garment"> | string | null
+  source?: Prisma.StringNullableFilter<"Garment"> | string | null
+  onModel?: Prisma.BoolFilter<"Garment"> | boolean
   storeId?: Prisma.StringNullableFilter<"Garment"> | string | null
   published?: Prisma.BoolFilter<"Garment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Garment"> | Date | string
@@ -316,6 +356,10 @@ export type GarmentOrderByWithAggregationInput = {
   tagline?: Prisma.SortOrderInput | Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   priceInPaise?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  brand?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrderInput | Prisma.SortOrder
+  onModel?: Prisma.SortOrder
   storeId?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -338,6 +382,10 @@ export type GarmentScalarWhereWithAggregatesInput = {
   tagline?: Prisma.StringNullableWithAggregatesFilter<"Garment"> | string | null
   imageKey?: Prisma.StringWithAggregatesFilter<"Garment"> | string
   priceInPaise?: Prisma.IntNullableWithAggregatesFilter<"Garment"> | number | null
+  buyUrl?: Prisma.StringNullableWithAggregatesFilter<"Garment"> | string | null
+  brand?: Prisma.StringNullableWithAggregatesFilter<"Garment"> | string | null
+  source?: Prisma.StringNullableWithAggregatesFilter<"Garment"> | string | null
+  onModel?: Prisma.BoolWithAggregatesFilter<"Garment"> | boolean
   storeId?: Prisma.StringNullableWithAggregatesFilter<"Garment"> | string | null
   published?: Prisma.BoolWithAggregatesFilter<"Garment"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Garment"> | Date | string
@@ -352,6 +400,10 @@ export type GarmentCreateInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   published?: boolean
   createdAt?: Date | string
   store?: Prisma.StoreCreateNestedOneWithoutGarmentsInput
@@ -367,6 +419,10 @@ export type GarmentUncheckedCreateInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   storeId?: string | null
   published?: boolean
   createdAt?: Date | string
@@ -382,6 +438,10 @@ export type GarmentUpdateInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   store?: Prisma.StoreUpdateOneWithoutGarmentsNestedInput
@@ -397,6 +457,10 @@ export type GarmentUncheckedUpdateInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -412,6 +476,10 @@ export type GarmentCreateManyInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   storeId?: string | null
   published?: boolean
   createdAt?: Date | string
@@ -426,6 +494,10 @@ export type GarmentUpdateManyMutationInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -439,6 +511,10 @@ export type GarmentUncheckedUpdateManyInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -453,6 +529,10 @@ export type GarmentCountOrderByAggregateInput = {
   tagline?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   priceInPaise?: Prisma.SortOrder
+  buyUrl?: Prisma.SortOrder
+  brand?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  onModel?: Prisma.SortOrder
   storeId?: Prisma.SortOrder
   published?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -471,6 +551,10 @@ export type GarmentMaxOrderByAggregateInput = {
   tagline?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   priceInPaise?: Prisma.SortOrder
+  buyUrl?: Prisma.SortOrder
+  brand?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  onModel?: Prisma.SortOrder
   storeId?: Prisma.SortOrder
   published?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -485,6 +569,10 @@ export type GarmentMinOrderByAggregateInput = {
   tagline?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   priceInPaise?: Prisma.SortOrder
+  buyUrl?: Prisma.SortOrder
+  brand?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  onModel?: Prisma.SortOrder
   storeId?: Prisma.SortOrder
   published?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -582,6 +670,10 @@ export type GarmentCreateWithoutLooksInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   published?: boolean
   createdAt?: Date | string
   store?: Prisma.StoreCreateNestedOneWithoutGarmentsInput
@@ -596,6 +688,10 @@ export type GarmentUncheckedCreateWithoutLooksInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   storeId?: string | null
   published?: boolean
   createdAt?: Date | string
@@ -626,6 +722,10 @@ export type GarmentUpdateWithoutLooksInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   store?: Prisma.StoreUpdateOneWithoutGarmentsNestedInput
@@ -640,6 +740,10 @@ export type GarmentUncheckedUpdateWithoutLooksInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -654,6 +758,10 @@ export type GarmentCreateWithoutStoreInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   published?: boolean
   createdAt?: Date | string
   looks?: Prisma.LookGarmentCreateNestedManyWithoutGarmentInput
@@ -668,6 +776,10 @@ export type GarmentUncheckedCreateWithoutStoreInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   published?: boolean
   createdAt?: Date | string
   looks?: Prisma.LookGarmentUncheckedCreateNestedManyWithoutGarmentInput
@@ -711,6 +823,10 @@ export type GarmentScalarWhereInput = {
   tagline?: Prisma.StringNullableFilter<"Garment"> | string | null
   imageKey?: Prisma.StringFilter<"Garment"> | string
   priceInPaise?: Prisma.IntNullableFilter<"Garment"> | number | null
+  buyUrl?: Prisma.StringNullableFilter<"Garment"> | string | null
+  brand?: Prisma.StringNullableFilter<"Garment"> | string | null
+  source?: Prisma.StringNullableFilter<"Garment"> | string | null
+  onModel?: Prisma.BoolFilter<"Garment"> | boolean
   storeId?: Prisma.StringNullableFilter<"Garment"> | string | null
   published?: Prisma.BoolFilter<"Garment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Garment"> | Date | string
@@ -725,6 +841,10 @@ export type GarmentCreateManyStoreInput = {
   tagline?: string | null
   imageKey: string
   priceInPaise?: number | null
+  buyUrl?: string | null
+  brand?: string | null
+  source?: string | null
+  onModel?: boolean
   published?: boolean
   createdAt?: Date | string
 }
@@ -738,6 +858,10 @@ export type GarmentUpdateWithoutStoreInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   looks?: Prisma.LookGarmentUpdateManyWithoutGarmentNestedInput
@@ -752,6 +876,10 @@ export type GarmentUncheckedUpdateWithoutStoreInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   looks?: Prisma.LookGarmentUncheckedUpdateManyWithoutGarmentNestedInput
@@ -766,6 +894,10 @@ export type GarmentUncheckedUpdateManyWithoutStoreInput = {
   tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.StringFieldUpdateOperationsInput | string
   priceInPaise?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onModel?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -810,6 +942,10 @@ export type GarmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tagline?: boolean
   imageKey?: boolean
   priceInPaise?: boolean
+  buyUrl?: boolean
+  brand?: boolean
+  source?: boolean
+  onModel?: boolean
   storeId?: boolean
   published?: boolean
   createdAt?: boolean
@@ -827,6 +963,10 @@ export type GarmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tagline?: boolean
   imageKey?: boolean
   priceInPaise?: boolean
+  buyUrl?: boolean
+  brand?: boolean
+  source?: boolean
+  onModel?: boolean
   storeId?: boolean
   published?: boolean
   createdAt?: boolean
@@ -842,6 +982,10 @@ export type GarmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tagline?: boolean
   imageKey?: boolean
   priceInPaise?: boolean
+  buyUrl?: boolean
+  brand?: boolean
+  source?: boolean
+  onModel?: boolean
   storeId?: boolean
   published?: boolean
   createdAt?: boolean
@@ -857,12 +1001,16 @@ export type GarmentSelectScalar = {
   tagline?: boolean
   imageKey?: boolean
   priceInPaise?: boolean
+  buyUrl?: boolean
+  brand?: boolean
+  source?: boolean
+  onModel?: boolean
   storeId?: boolean
   published?: boolean
   createdAt?: boolean
 }
 
-export type GarmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "category" | "fit" | "tagline" | "imageKey" | "priceInPaise" | "storeId" | "published" | "createdAt", ExtArgs["result"]["garment"]>
+export type GarmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "category" | "fit" | "tagline" | "imageKey" | "priceInPaise" | "buyUrl" | "brand" | "source" | "onModel" | "storeId" | "published" | "createdAt", ExtArgs["result"]["garment"]>
 export type GarmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   store?: boolean | Prisma.Garment$storeArgs<ExtArgs>
   looks?: boolean | Prisma.Garment$looksArgs<ExtArgs>
@@ -896,10 +1044,29 @@ export type $GarmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      */
     imageKey: string
     /**
-     * Deliberately nullable. We show no prices while onboarding stores —
-     * shoppers are here to see themselves in the garment, not to buy yet.
+     * Nullable for Xirevoa's own demo pieces. Real (affiliate/store) products
+     * carry a price so shoppers know what they're buying.
      */
     priceInPaise: number | null
+    /**
+     * ── Real, buyable products (affiliate feeds or store inventory) ──
+     * The affiliate deep link. When present, the UI shows a "Buy" button and this
+     * is what earns commission. Null = a Xirevoa demo piece, try-on only.
+     */
+    buyUrl: string | null
+    brand: string | null
+    /**
+     * Where it came from — "myntra", "amazon", "earnkaro", "store", or null for
+     * our own catalog. Lets us attribute revenue and filter a real Shop from the
+     * AI demo collection.
+     */
+    source: string | null
+    /**
+     * True if the source image is a garment ON A MODEL (marketplace listing)
+     * rather than a flat-lay. Verified to still transfer cleanly, but the try-on
+     * prompt leans harder on "ignore the model" for these.
+     */
+    onModel: boolean
     storeId: string | null
     published: boolean
     createdAt: Date
@@ -1336,6 +1503,10 @@ export interface GarmentFieldRefs {
   readonly tagline: Prisma.FieldRef<"Garment", 'String'>
   readonly imageKey: Prisma.FieldRef<"Garment", 'String'>
   readonly priceInPaise: Prisma.FieldRef<"Garment", 'Int'>
+  readonly buyUrl: Prisma.FieldRef<"Garment", 'String'>
+  readonly brand: Prisma.FieldRef<"Garment", 'String'>
+  readonly source: Prisma.FieldRef<"Garment", 'String'>
+  readonly onModel: Prisma.FieldRef<"Garment", 'Boolean'>
   readonly storeId: Prisma.FieldRef<"Garment", 'String'>
   readonly published: Prisma.FieldRef<"Garment", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Garment", 'DateTime'>

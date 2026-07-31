@@ -19,6 +19,7 @@ import {
   Download,
   Layers,
   RotateCcw,
+  ExternalLink,
   Search,
   Upload,
   X,
@@ -36,7 +37,7 @@ import {
   subscribeRecent,
   type RecentPhoto,
 } from "@/lib/recent-photos";
-import { CATALOG, CATEGORIES, bySlug, type CatalogItem } from "@/lib/catalog";
+import { CATALOG, CATEGORIES, type CatalogItem } from "@/lib/catalog";
 import { downscaleToDataUrl } from "@/lib/downscale";
 import { cn } from "@/lib/cn";
 
@@ -55,10 +56,26 @@ type Stage = "idle" | "fitting" | "done" | "error";
  * So the UI must (a) never let the user fire one accidentally, (b) make the
  * 30s wait feel deliberate rather than broken, and (c) never lose their photo.
  */
-export function Studio({ initialSlug }: { initialSlug?: string }) {
+export function Studio({
+  initialSlug,
+  products = [],
+}: {
+  initialSlug?: string;
+  /** Real, buyable products from the DB (affiliate feeds / stores). Merged into
+   *  the catalog so they render and try on exactly like the demo pieces. */
+  products?: CatalogItem[];
+}) {
+  // Real products first so they're what people see. A local lookup replaces the
+  // static bySlug everywhere below, since bySlug only knows the demo catalog.
+  const allItems = useMemo(() => [...products, ...CATALOG], [products]);
+  const findItem = useCallback(
+    (slug: string) => allItems.find((i) => i.slug === slug),
+    [allItems],
+  );
+
   const [person, setPerson] = useState<string | null>(null);
   const [look, setLook] = useState<string[]>(
-    initialSlug && bySlug(initialSlug) ? [initialSlug] : [],
+    initialSlug && allItems.some((i) => i.slug === initialSlug) ? [initialSlug] : [],
   );
   const [category, setCategory] = useState<string>("all");
   const [stage, setStage] = useState<Stage>("idle");
@@ -93,7 +110,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
   // and "chelsea" all land.
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return CATALOG.filter((item) => {
+    return allItems.filter((item) => {
       if (category !== "all" && item.category !== category) return false;
       if (!q) return true;
       return (
@@ -103,7 +120,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
         item.category.includes(q)
       );
     });
-  }, [category, query]);
+  }, [allItems, category, query]);
 
   const shown = visible.slice(0, limit);
 
@@ -121,7 +138,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
       // One garment per body zone — you can't wear two pairs of jeans. Adding a
       // second item of a category replaces the first, which is what people mean.
       const withoutSameCategory = prev.filter(
-        (s) => bySlug(s)?.category !== item.category,
+        (s) => findItem(s)?.category !== item.category,
       );
       if (withoutSameCategory.length >= MAX_LAYERS) return prev;
       return [...withoutSameCategory, item.slug];
@@ -168,7 +185,7 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
     // this is the moment it's obviously relevant.
     void ensurePermission();
 
-    const names = look.map((s) => bySlug(s)?.name).filter(Boolean).join(", ");
+    const names = look.map((s) => findItem(s)?.name).filter(Boolean).join(", ");
 
     try {
       // This request keeps running while the tab is in the background, which is
@@ -290,7 +307,11 @@ export function Studio({ initialSlug }: { initialSlug?: string }) {
             onPicked={(slugs) => setLook(slugs.slice(0, MAX_LAYERS))}
           />
 
-          <LookStack look={look} onRemove={(slug) => setLook((l) => l.filter((s) => s !== slug))} />
+          <LookStack
+            look={look}
+            findItem={findItem}
+            onRemove={(slug) => setLook((l) => l.filter((s) => s !== slug))}
+          />
 
           <AnimatePresence>
             {error && (
@@ -771,9 +792,11 @@ function FittingOverlay() {
 function LookStack({
   look,
   onRemove,
+  findItem,
 }: {
   look: string[];
   onRemove: (slug: string) => void;
+  findItem: (slug: string) => CatalogItem | undefined;
 }) {
   return (
     <div className="mt-6">
@@ -800,7 +823,7 @@ function LookStack({
           )}
 
           {look.map((slug) => {
-            const item = bySlug(slug);
+            const item = findItem(slug);
             if (!item) return null;
             return (
               <motion.button
@@ -838,20 +861,26 @@ function GarmentCard({
   selected: boolean;
   onToggle: () => void;
 }) {
+  // A real product carries a buy link; a demo piece doesn't.
+  const price =
+    item.priceInPaise != null
+      ? `₹${(item.priceInPaise / 100).toLocaleString("en-IN")}`
+      : null;
+
   return (
-    <motion.button
+    <motion.div
       layout
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      onClick={onToggle}
-      aria-pressed={selected}
       className="group text-left"
     >
-      <div
+      <button
+        onClick={onToggle}
+        aria-pressed={selected}
         className={cn(
-          "relative aspect-square overflow-hidden rounded-xl bg-product ring-2 transition-all duration-300",
+          "relative block aspect-square w-full overflow-hidden rounded-xl bg-product ring-2 transition-all duration-300",
           selected ? "ring-flare-rose" : "ring-transparent hover:ring-bone-100/20",
         )}
       >
@@ -876,16 +905,39 @@ function GarmentCard({
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
 
-      <div className="flex items-baseline justify-between gap-2 pt-3">
-        <h3 className="text-sm font-medium text-bone-50">{item.name}</h3>
-        {item.fit && (
-          <span className="shrink-0 text-[10px] tracking-wide text-bone-400 uppercase">
-            {item.fit}
+        {item.brand && (
+          <span className="glass absolute top-2.5 left-2.5 rounded-full px-2 py-0.5 text-[10px] font-medium text-bone-100">
+            {item.brand}
           </span>
         )}
+      </button>
+
+      <div className="flex items-baseline justify-between gap-2 pt-3">
+        <h3 className="line-clamp-1 text-sm font-medium text-bone-50">{item.name}</h3>
+        {price ? (
+          <span className="shrink-0 text-sm font-semibold text-bone-100">{price}</span>
+        ) : (
+          item.fit && (
+            <span className="shrink-0 text-[10px] tracking-wide text-bone-400 uppercase">
+              {item.fit}
+            </span>
+          )
+        )}
       </div>
-    </motion.button>
+
+      {/* The revenue link. rel=sponsored+nofollow is required for affiliate links. */}
+      {item.buyUrl && (
+        <a
+          href={item.buyUrl}
+          target="_blank"
+          rel="sponsored nofollow noopener"
+          className="mt-2 flex items-center justify-center gap-1.5 rounded-full bg-bone-100 py-1.5 text-xs font-medium text-ink-950 transition-transform hover:scale-[1.02]"
+        >
+          Buy
+          <ExternalLink className="size-3" />
+        </a>
+      )}
+    </motion.div>
   );
 }

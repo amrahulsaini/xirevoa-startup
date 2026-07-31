@@ -14,6 +14,12 @@ export interface CatalogItem {
   prompt: string;
   /** Local path, filled from the slug. */
   image: string;
+
+  /** ── Real products only (from affiliate feeds / stores) ── */
+  /** Affiliate deep link. Present ⇒ show a Buy button; absent ⇒ Xirevoa demo. */
+  buyUrl?: string;
+  brand?: string;
+  priceInPaise?: number;
 }
 
 /**

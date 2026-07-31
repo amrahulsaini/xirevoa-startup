@@ -121,7 +121,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const items = slugs.map(bySlug);
+  // Resolve each slug from the static demo catalog first, then fall back to the
+  // database — that's where imported affiliate products and store inventory live.
+  const items = await Promise.all(
+    slugs.map(async (slug) => {
+      const stat = bySlug(slug);
+      if (stat) {
+        return { category: stat.category, name: stat.name, fit: stat.fit, slug, onModel: false };
+      }
+      const g = await prisma.garment.findUnique({
+        where: { slug },
+        select: { category: true, name: true, fit: true, slug: true, onModel: true },
+      });
+      return g;
+    }),
+  );
   const unknown = slugs.filter((_, i) => !items[i]);
   if (unknown.length) {
     return NextResponse.json(
@@ -155,6 +169,7 @@ export async function POST(req: NextRequest) {
       category: item!.category,
       name: `the ${item!.name} (${item!.fit ?? item!.category})`,
       image: await loadGarmentImage(item!.slug),
+      onModel: item!.onModel,
     })),
   );
 

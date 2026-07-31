@@ -181,6 +181,10 @@ export const GarmentScalarFieldEnum = {
   tagline: 'tagline',
   imageKey: 'imageKey',
   priceInPaise: 'priceInPaise',
+  buyUrl: 'buyUrl',
+  brand: 'brand',
+  source: 'source',
+  onModel: 'onModel',
   storeId: 'storeId',
   published: 'published',
   createdAt: 'createdAt'
