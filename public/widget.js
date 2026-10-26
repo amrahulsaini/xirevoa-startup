@@ -73,7 +73,9 @@
     return best && absolute(best);
   };
 
-  const productName = () => {
+  const productName = (slot) => {
+    const explicit = slot && slot.getAttribute("data-name");
+    if (explicit) return explicit.trim().slice(0, 200);
     const og = document.querySelector('meta[property="og:title"]');
     const h1 = document.querySelector("h1");
     return ((og && og.content) || (h1 && h1.textContent) || document.title).trim().slice(0, 200);
@@ -143,15 +145,14 @@
     root.querySelector(".open").addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      openSheet(findProductImage(slot) || image);
+      openSheet(findProductImage(slot) || image, productName(slot));
     });
 
     if (slot) slot.appendChild(host);
     else cart.insertAdjacentElement("afterend", host);
   };
 
-  const openSheet = (image) => {
-    const name = productName();
+  const openSheet = (image, name) => {
     let photo = null;
     let tryonId = null;
 
@@ -211,7 +212,10 @@
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.url) return ready(data.error || "Something went wrong. Please try again.");
         tryonId = data.id;
-        result(data.url);
+        const preload = new Image();
+        preload.onload = () => result(data.url);
+        preload.onerror = () => ready("Your look is ready but didn't load. Please try again.");
+        preload.src = data.url;
       } catch {
         ready("Couldn't reach the fitting room. Check your connection and try again.");
       }

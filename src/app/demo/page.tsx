@@ -73,7 +73,7 @@ export default function DemoPage() {
               <div className="mt-8">
                 <DemoCart />
                 {key ? (
-                  <div data-xirevoa-tryon="" data-image="/business/product.jpg" />
+                  <div data-xirevoa-tryon="" data-image="/business/product.jpg" data-name="Leather Biker Jacket" />
                 ) : (
                   <p className="mt-3 text-sm text-neutral-500">The demo is switched off right now.</p>
                 )}
