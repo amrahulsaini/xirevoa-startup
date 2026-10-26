@@ -287,6 +287,23 @@ export type EnumStoreStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumStoreStatusFilter<$PrismaModel>
 }
 
+export type EnumBrandTryOnStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.BrandTryOnStatus | Prisma.EnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBrandTryOnStatusFilter<$PrismaModel> | $Enums.BrandTryOnStatus
+}
+
+export type EnumBrandTryOnStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BrandTryOnStatus | Prisma.EnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBrandTryOnStatusWithAggregatesFilter<$PrismaModel> | $Enums.BrandTryOnStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBrandTryOnStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBrandTryOnStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -571,6 +588,23 @@ export type NestedEnumStoreStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumStoreStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumStoreStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumBrandTryOnStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.BrandTryOnStatus | Prisma.EnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBrandTryOnStatusFilter<$PrismaModel> | $Enums.BrandTryOnStatus
+}
+
+export type NestedEnumBrandTryOnStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BrandTryOnStatus | Prisma.EnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BrandTryOnStatus[] | Prisma.ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBrandTryOnStatusWithAggregatesFilter<$PrismaModel> | $Enums.BrandTryOnStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBrandTryOnStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBrandTryOnStatusFilter<$PrismaModel>
 }
 
 

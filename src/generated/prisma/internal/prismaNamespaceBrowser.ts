@@ -61,7 +61,9 @@ export const ModelName = {
   Garment: 'Garment',
   Look: 'Look',
   LookGarment: 'LookGarment',
-  Store: 'Store'
+  Store: 'Store',
+  Brand: 'Brand',
+  BrandTryOn: 'BrandTryOn'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -229,6 +231,36 @@ export const StoreScalarFieldEnum = {
 } as const
 
 export type StoreScalarFieldEnum = (typeof StoreScalarFieldEnum)[keyof typeof StoreScalarFieldEnum]
+
+
+export const BrandScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  website: 'website',
+  domain: 'domain',
+  key: 'key',
+  credits: 'credits',
+  active: 'active',
+  createdAt: 'createdAt'
+} as const
+
+export type BrandScalarFieldEnum = (typeof BrandScalarFieldEnum)[keyof typeof BrandScalarFieldEnum]
+
+
+export const BrandTryOnScalarFieldEnum = {
+  id: 'id',
+  brandId: 'brandId',
+  productUrl: 'productUrl',
+  productName: 'productName',
+  productImage: 'productImage',
+  status: 'status',
+  imageKey: 'imageKey',
+  addedToCart: 'addedToCart',
+  createdAt: 'createdAt'
+} as const
+
+export type BrandTryOnScalarFieldEnum = (typeof BrandTryOnScalarFieldEnum)[keyof typeof BrandTryOnScalarFieldEnum]
 
 
 export const SortOrder = {

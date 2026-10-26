@@ -17,6 +17,7 @@ const COLUMNS = [
     links: [
       { href: "/studio", label: "Try-On Studio" },
       { href: "/looks", label: "Looks" },
+      { href: "/business", label: "For Brands" },
       { href: "/stores", label: "For Stores" },
       { href: "/about", label: "About" },
     ],

@@ -62,3 +62,12 @@ export const StoreStatus = {
 } as const
 
 export type StoreStatus = (typeof StoreStatus)[keyof typeof StoreStatus]
+
+
+export const BrandTryOnStatus = {
+  ok: 'ok',
+  cached: 'cached',
+  failed: 'failed'
+} as const
+
+export type BrandTryOnStatus = (typeof BrandTryOnStatus)[keyof typeof BrandTryOnStatus]

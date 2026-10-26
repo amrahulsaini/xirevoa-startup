@@ -260,6 +260,7 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   looks?: Prisma.LookListRelationFilter
   store?: Prisma.XOR<Prisma.StoreNullableScalarRelationFilter, Prisma.StoreWhereInput> | null
+  brand?: Prisma.XOR<Prisma.BrandNullableScalarRelationFilter, Prisma.BrandWhereInput> | null
   xpointTx?: Prisma.XPointTxListRelationFilter
   orders?: Prisma.OrderListRelationFilter
 }
@@ -279,6 +280,7 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   looks?: Prisma.LookOrderByRelationAggregateInput
   store?: Prisma.StoreOrderByWithRelationInput
+  brand?: Prisma.BrandOrderByWithRelationInput
   xpointTx?: Prisma.XPointTxOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
 }
@@ -301,6 +303,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   looks?: Prisma.LookListRelationFilter
   store?: Prisma.XOR<Prisma.StoreNullableScalarRelationFilter, Prisma.StoreWhereInput> | null
+  brand?: Prisma.XOR<Prisma.BrandNullableScalarRelationFilter, Prisma.BrandWhereInput> | null
   xpointTx?: Prisma.XPointTxListRelationFilter
   orders?: Prisma.OrderListRelationFilter
 }, "id" | "email" | "username">
@@ -354,6 +357,7 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
@@ -373,6 +377,7 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandUncheckedCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
@@ -392,6 +397,7 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
@@ -411,6 +417,7 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUncheckedUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -614,6 +621,20 @@ export type UserUpdateOneRequiredWithoutStoreNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStoreInput, Prisma.UserUpdateWithoutStoreInput>, Prisma.UserUncheckedUpdateWithoutStoreInput>
 }
 
+export type UserCreateNestedOneWithoutBrandInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBrandInput, Prisma.UserUncheckedCreateWithoutBrandInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBrandInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBrandNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBrandInput, Prisma.UserUncheckedCreateWithoutBrandInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBrandInput
+  upsert?: Prisma.UserUpsertWithoutBrandInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBrandInput, Prisma.UserUpdateWithoutBrandInput>, Prisma.UserUncheckedUpdateWithoutBrandInput>
+}
+
 export type UserCreateWithoutXpointTxInput = {
   id?: string
   name?: string | null
@@ -629,6 +650,7 @@ export type UserCreateWithoutXpointTxInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandCreateNestedOneWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
@@ -647,6 +669,7 @@ export type UserUncheckedCreateWithoutXpointTxInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandUncheckedCreateNestedOneWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -681,6 +704,7 @@ export type UserUpdateWithoutXpointTxInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUpdateOneWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
@@ -699,6 +723,7 @@ export type UserUncheckedUpdateWithoutXpointTxInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUncheckedUpdateOneWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -717,6 +742,7 @@ export type UserCreateWithoutOrdersInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
 }
 
@@ -735,6 +761,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandUncheckedCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -769,6 +796,7 @@ export type UserUpdateWithoutOrdersInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
 }
 
@@ -787,6 +815,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUncheckedUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -804,6 +833,7 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
@@ -822,6 +852,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandUncheckedCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
@@ -856,6 +887,7 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
@@ -874,6 +906,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUncheckedUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -892,6 +925,7 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
@@ -910,6 +944,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandUncheckedCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
@@ -944,6 +979,7 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
@@ -962,6 +998,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUncheckedUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -980,6 +1017,7 @@ export type UserCreateWithoutLooksInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
@@ -998,6 +1036,7 @@ export type UserUncheckedCreateWithoutLooksInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  brand?: Prisma.BrandUncheckedCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1032,6 +1071,7 @@ export type UserUpdateWithoutLooksInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
@@ -1050,6 +1090,7 @@ export type UserUncheckedUpdateWithoutLooksInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
+  brand?: Prisma.BrandUncheckedUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1068,6 +1109,7 @@ export type UserCreateWithoutStoreInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   looks?: Prisma.LookCreateNestedManyWithoutUserInput
+  brand?: Prisma.BrandCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
@@ -1086,6 +1128,7 @@ export type UserUncheckedCreateWithoutStoreInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
+  brand?: Prisma.BrandUncheckedCreateNestedOneWithoutUserInput
   xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1120,6 +1163,7 @@ export type UserUpdateWithoutStoreInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUpdateManyWithoutUserNestedInput
+  brand?: Prisma.BrandUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
@@ -1138,6 +1182,99 @@ export type UserUncheckedUpdateWithoutStoreInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
+  brand?: Prisma.BrandUncheckedUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutBrandInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  username?: string | null
+  passwordHash?: string | null
+  photoKey?: string | null
+  xpoints?: number
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  looks?: Prisma.LookCreateNestedManyWithoutUserInput
+  store?: Prisma.StoreCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutBrandInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  username?: string | null
+  passwordHash?: string | null
+  photoKey?: string | null
+  xpoints?: number
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  looks?: Prisma.LookUncheckedCreateNestedManyWithoutUserInput
+  store?: Prisma.StoreUncheckedCreateNestedOneWithoutUserInput
+  xpointTx?: Prisma.XPointTxUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutBrandInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBrandInput, Prisma.UserUncheckedCreateWithoutBrandInput>
+}
+
+export type UserUpsertWithoutBrandInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBrandInput, Prisma.UserUncheckedUpdateWithoutBrandInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBrandInput, Prisma.UserUncheckedCreateWithoutBrandInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBrandInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBrandInput, Prisma.UserUncheckedUpdateWithoutBrandInput>
+}
+
+export type UserUpdateWithoutBrandInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  looks?: Prisma.LookUpdateManyWithoutUserNestedInput
+  store?: Prisma.StoreUpdateOneWithoutUserNestedInput
+  xpointTx?: Prisma.XPointTxUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBrandInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xpoints?: Prisma.IntFieldUpdateOperationsInput | number
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  looks?: Prisma.LookUncheckedUpdateManyWithoutUserNestedInput
+  store?: Prisma.StoreUncheckedUpdateOneWithoutUserNestedInput
   xpointTx?: Prisma.XPointTxUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1224,6 +1361,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   looks?: boolean | Prisma.User$looksArgs<ExtArgs>
   store?: boolean | Prisma.User$storeArgs<ExtArgs>
+  brand?: boolean | Prisma.User$brandArgs<ExtArgs>
   xpointTx?: boolean | Prisma.User$xpointTxArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1274,6 +1412,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   looks?: boolean | Prisma.User$looksArgs<ExtArgs>
   store?: boolean | Prisma.User$storeArgs<ExtArgs>
+  brand?: boolean | Prisma.User$brandArgs<ExtArgs>
   xpointTx?: boolean | Prisma.User$xpointTxArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1288,6 +1427,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     looks: Prisma.$LookPayload<ExtArgs>[]
     store: Prisma.$StorePayload<ExtArgs> | null
+    brand: Prisma.$BrandPayload<ExtArgs> | null
     xpointTx: Prisma.$XPointTxPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
   }
@@ -1716,6 +1856,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   looks<T extends Prisma.User$looksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$looksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   store<T extends Prisma.User$storeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$storeArgs<ExtArgs>>): Prisma.Prisma__StoreClient<runtime.Types.Result.GetResult<Prisma.$StorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  brand<T extends Prisma.User$brandArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$brandArgs<ExtArgs>>): Prisma.Prisma__BrandClient<runtime.Types.Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   xpointTx<T extends Prisma.User$xpointTxArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$xpointTxArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$XPointTxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2238,6 +2379,25 @@ export type User$storeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   include?: Prisma.StoreInclude<ExtArgs> | null
   where?: Prisma.StoreWhereInput
+}
+
+/**
+ * User.brand
+ */
+export type User$brandArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Brand
+   */
+  select?: Prisma.BrandSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Brand
+   */
+  omit?: Prisma.BrandOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BrandInclude<ExtArgs> | null
+  where?: Prisma.BrandWhereInput
 }
 
 /**

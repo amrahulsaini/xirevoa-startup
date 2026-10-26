@@ -89,3 +89,13 @@ export type LookGarment = Prisma.LookGarmentModel
  * A local clothing store listing its stock on Xirevoa.
  */
 export type Store = Prisma.StoreModel
+/**
+ * Model Brand
+ * 
+ */
+export type Brand = Prisma.BrandModel
+/**
+ * Model BrandTryOn
+ * 
+ */
+export type BrandTryOn = Prisma.BrandTryOnModel

@@ -394,7 +394,9 @@ export const ModelName = {
   Garment: 'Garment',
   Look: 'Look',
   LookGarment: 'LookGarment',
-  Store: 'Store'
+  Store: 'Store',
+  Brand: 'Brand',
+  BrandTryOn: 'BrandTryOn'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -410,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "xPointTx" | "order" | "freeGrant" | "account" | "session" | "verificationToken" | "garment" | "look" | "lookGarment" | "store"
+    modelProps: "user" | "xPointTx" | "order" | "freeGrant" | "account" | "session" | "verificationToken" | "garment" | "look" | "lookGarment" | "store" | "brand" | "brandTryOn"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1228,6 +1230,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Brand: {
+      payload: Prisma.$BrandPayload<ExtArgs>
+      fields: Prisma.BrandFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BrandFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BrandFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>
+        }
+        findFirst: {
+          args: Prisma.BrandFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BrandFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>
+        }
+        findMany: {
+          args: Prisma.BrandFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>[]
+        }
+        create: {
+          args: Prisma.BrandCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>
+        }
+        createMany: {
+          args: Prisma.BrandCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BrandCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>[]
+        }
+        delete: {
+          args: Prisma.BrandDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>
+        }
+        update: {
+          args: Prisma.BrandUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>
+        }
+        deleteMany: {
+          args: Prisma.BrandDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BrandUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BrandUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>[]
+        }
+        upsert: {
+          args: Prisma.BrandUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandPayload>
+        }
+        aggregate: {
+          args: Prisma.BrandAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBrand>
+        }
+        groupBy: {
+          args: Prisma.BrandGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BrandGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BrandCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BrandCountAggregateOutputType> | number
+        }
+      }
+    }
+    BrandTryOn: {
+      payload: Prisma.$BrandTryOnPayload<ExtArgs>
+      fields: Prisma.BrandTryOnFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BrandTryOnFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BrandTryOnFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>
+        }
+        findFirst: {
+          args: Prisma.BrandTryOnFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BrandTryOnFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>
+        }
+        findMany: {
+          args: Prisma.BrandTryOnFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>[]
+        }
+        create: {
+          args: Prisma.BrandTryOnCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>
+        }
+        createMany: {
+          args: Prisma.BrandTryOnCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BrandTryOnCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>[]
+        }
+        delete: {
+          args: Prisma.BrandTryOnDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>
+        }
+        update: {
+          args: Prisma.BrandTryOnUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>
+        }
+        deleteMany: {
+          args: Prisma.BrandTryOnDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BrandTryOnUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BrandTryOnUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>[]
+        }
+        upsert: {
+          args: Prisma.BrandTryOnUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandTryOnPayload>
+        }
+        aggregate: {
+          args: Prisma.BrandTryOnAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBrandTryOn>
+        }
+        groupBy: {
+          args: Prisma.BrandTryOnGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BrandTryOnGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BrandTryOnCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BrandTryOnCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1418,6 +1568,36 @@ export const StoreScalarFieldEnum = {
 export type StoreScalarFieldEnum = (typeof StoreScalarFieldEnum)[keyof typeof StoreScalarFieldEnum]
 
 
+export const BrandScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  website: 'website',
+  domain: 'domain',
+  key: 'key',
+  credits: 'credits',
+  active: 'active',
+  createdAt: 'createdAt'
+} as const
+
+export type BrandScalarFieldEnum = (typeof BrandScalarFieldEnum)[keyof typeof BrandScalarFieldEnum]
+
+
+export const BrandTryOnScalarFieldEnum = {
+  id: 'id',
+  brandId: 'brandId',
+  productUrl: 'productUrl',
+  productName: 'productName',
+  productImage: 'productImage',
+  status: 'status',
+  imageKey: 'imageKey',
+  addedToCart: 'addedToCart',
+  createdAt: 'createdAt'
+} as const
+
+export type BrandTryOnScalarFieldEnum = (typeof BrandTryOnScalarFieldEnum)[keyof typeof BrandTryOnScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1568,6 +1748,20 @@ export type ListEnumStoreStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'BrandTryOnStatus'
+ */
+export type EnumBrandTryOnStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BrandTryOnStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BrandTryOnStatus[]'
+ */
+export type ListEnumBrandTryOnStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BrandTryOnStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1701,6 +1895,8 @@ export type GlobalOmitConfig = {
   look?: Prisma.LookOmit
   lookGarment?: Prisma.LookGarmentOmit
   store?: Prisma.StoreOmit
+  brand?: Prisma.BrandOmit
+  brandTryOn?: Prisma.BrandTryOnOmit
 }
 
 /* Types for Logging */

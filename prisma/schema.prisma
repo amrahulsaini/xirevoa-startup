@@ -39,6 +39,7 @@ model User {
   sessions Session[]
   looks    Look[]
   store    Store?
+  brand    Brand?
   xpointTx XPointTx[]
   orders   Order[]
 }
@@ -312,4 +313,50 @@ model Store {
   garments Garment[]
 
   @@index([status])
+}
+
+/// ──────────────────────────────── Brands ──────────────────────────────
+
+model Brand {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name    String
+  website String
+  domain  String
+
+  key String @unique
+
+  credits Int     @default(50)
+  active  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  tryons BrandTryOn[]
+}
+
+enum BrandTryOnStatus {
+  ok
+  cached
+  failed
+}
+
+model BrandTryOn {
+  id      String @id @default(cuid())
+  brandId String
+  brand   Brand  @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  productUrl   String
+  productName  String?
+  productImage String
+
+  status   BrandTryOnStatus
+  imageKey String?
+
+  addedToCart Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([brandId, createdAt])
 }
