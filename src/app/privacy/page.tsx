@@ -14,8 +14,9 @@ export default function PrivacyPage() {
     >
       <Section title="Who we are">
         <p>
-          Xirevoa is operated from India. For anything on this page, including deletion requests
-          and complaints, write to <a href="mailto:contact@xirevoa.com">contact@xirevoa.com</a>.
+          Xirevoa, backed by Loopwar.dev, is based at Besarda, Tiba Basai, Jhunjhunu, Rajasthan
+          333036, India. For anything on this page, including deletion requests and complaints,
+          write to <a href="mailto:contact@xirevoa.com">contact@xirevoa.com</a>.
         </p>
       </Section>
 

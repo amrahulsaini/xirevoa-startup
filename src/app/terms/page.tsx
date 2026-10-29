@@ -115,7 +115,8 @@ export default function TermsPage() {
         <p>
           If we change these terms, we will update this page and the date at the top, and tell you
           by email if the change is significant. These terms are governed by the laws of India.
-          Questions or complaints: <a href="mailto:contact@xirevoa.com">contact@xirevoa.com</a>.
+          Questions or complaints: <a href="mailto:contact@xirevoa.com">contact@xirevoa.com</a>, or
+          Xirevoa, Besarda, Tiba Basai, Jhunjhunu, Rajasthan 333036, India.
         </p>
       </Section>
     </LegalPage>

@@ -45,6 +45,26 @@ export function Footer() {
               A fitting room that fits in your pocket. Built in India, for the
               stores on your street.
             </p>
+            <address className="mt-5 text-sm leading-relaxed text-bone-400 not-italic">
+              Besarda, Tiba Basai
+              <br />
+              Jhunjhunu, Rajasthan 333036
+              <br />
+              <a href="mailto:contact@xirevoa.com" className="transition-colors hover:text-bone-50">
+                contact@xirevoa.com
+              </a>
+            </address>
+            <p className="mt-5 text-xs tracking-[0.2em] text-bone-400 uppercase">
+              Backed by{" "}
+              <a
+                href="https://loopwar.dev"
+                target="_blank"
+                rel="noopener"
+                className="text-bone-100 transition-colors hover:text-bone-50"
+              >
+                Loopwar.dev
+              </a>
+            </p>
           </div>
 
           {COLUMNS.map((col) => (
