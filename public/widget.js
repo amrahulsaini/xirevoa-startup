@@ -1,18 +1,20 @@
 (() => {
-  const script = document.currentScript;
+  const script =
+    document.currentScript ||
+    document.querySelector('script[data-key][src*="widget.js"], script[data-key][data-src*="widget.js"]');
   if (!script || window.__xirevoa) return;
   window.__xirevoa = true;
 
   const key = script.getAttribute("data-key");
   if (!key) return;
-  const api = new URL(script.src).origin;
+  const api = new URL(script.src || script.getAttribute("data-src"), location.href).origin;
   const accent = script.getAttribute("data-color") || "#111111";
   const label = script.getAttribute("data-label") || "Try it on";
 
+  const CART_TEXT = /add\s+to\s+(cart|bag|basket)/i;
+  const CLICKABLE = 'button, input[type="submit"], a[role="button"], [role="button"]';
+
   const CART_SELECTORS = [
-    'form[action*="/cart/add"] [type="submit"]',
-    'form[action*="/cart/add"] button[name="add"]',
-    'button[name="add"]',
     ".single_add_to_cart_button",
     '[data-action="add-to-cart"]',
     'button[id*="add-to-cart" i]',
@@ -26,14 +28,23 @@
     return r.width > 0 && r.height > 0;
   };
 
+  const textOf = (el) => (el.textContent || el.value || el.getAttribute("aria-label") || "").trim();
+  const isCart = (el) => visible(el) && !el.closest("[data-xirevoa]") && CART_TEXT.test(textOf(el));
+
   const findCartButton = () => {
+    const inForm = [...document.querySelectorAll(`form[action*="/cart/add"] :is(${CLICKABLE})`)].find(isCart);
+    if (inForm) return inForm;
+    const named = [...document.querySelectorAll('button[name="add"]')].find(
+      (el) => visible(el) && textOf(el).length > 2 && !/sold out/i.test(textOf(el)),
+    );
+    if (named) return named;
+    const anywhere = [...document.querySelectorAll(CLICKABLE)].find(isCart);
+    if (anywhere) return anywhere;
     for (const sel of CART_SELECTORS) {
-      const el = [...document.querySelectorAll(sel)].find(visible);
+      const el = [...document.querySelectorAll(sel)].find((e) => visible(e) && textOf(e).length > 2);
       if (el) return el;
     }
-    return [...document.querySelectorAll('button, input[type="submit"], a[role="button"]')].find(
-      (el) => visible(el) && /add to (cart|bag|basket)/i.test(el.textContent || el.value || ""),
-    );
+    return null;
   };
 
   const isProductPage = () => {
@@ -97,6 +108,7 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     .open { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin: 10px 0 0; padding: 14px 18px; border: 1.5px solid ${accent}; border-radius: 6px; background: #fff; color: ${accent}; font-size: 15px; font-weight: 600; letter-spacing: .02em; cursor: pointer; transition: background .2s, color .2s; }
     .open:hover { background: ${accent}; color: #fff; }
+    .open.float { position: fixed; right: 16px; bottom: 16px; z-index: 2147483645; width: auto; margin: 0; padding: 12px 20px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
     .open svg { width: 18px; height: 18px; }
     .backdrop { position: fixed; inset: 0; z-index: 2147483646; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,.55); }
     .sheet { position: relative; width: 100%; max-width: 420px; max-height: calc(100dvh - 32px); overflow-y: auto; border-radius: 16px; background: #fff; color: #111; padding: 24px; box-shadow: 0 24px 64px rgba(0,0,0,.3); }
@@ -133,15 +145,16 @@
   const mount = () => {
     if (host && host.isConnected) return;
     const slot = document.querySelector("[data-xirevoa-tryon]");
+    if (!slot && !isProductPage()) return;
     const cart = findCartButton();
-    if (!slot && !(cart && isProductPage())) return;
     const image = findProductImage(slot);
     if (!image) return;
 
     host = document.createElement("div");
     host.setAttribute("data-xirevoa", "");
     const root = host.attachShadow({ mode: "open" });
-    root.innerHTML = `<style>${CSS}</style><button class="open" type="button">${ICON}${escape(label)}</button>`;
+    const floating = !slot && !cart;
+    root.innerHTML = `<style>${CSS}</style><button class="open${floating ? " float" : ""}" type="button">${ICON}${escape(label)}</button>`;
     root.querySelector(".open").addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -149,7 +162,8 @@
     });
 
     if (slot) slot.appendChild(host);
-    else cart.insertAdjacentElement("afterend", host);
+    else if (cart) cart.insertAdjacentElement("afterend", host);
+    else document.body.appendChild(host);
   };
 
   const openSheet = (image, name) => {
